@@ -1,0 +1,25 @@
+# depslib dependency file v1.0
+1353403753 source:/home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/main.cpp
+	<pthread.h>
+	"ConfigFile.hpp"
+	"Motors.hpp"
+	"Sensors.hpp"
+	<unistd.h>
+
+1349465318 source:/home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/ConfigFile.cpp
+	"ConfigFile.hpp"
+
+1349464622 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/ConfigFile.hpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<vector>
+
+1353403867 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Motors.hpp
+	<iostream>
+	<sys/time.h>
+	"ConfigFile.hpp"
+
+1353402685 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Sensors.hpp
+	"ConfigFile.hpp"
+
