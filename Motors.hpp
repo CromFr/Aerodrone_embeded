@@ -68,12 +68,10 @@ public:
 
 	}
 
-	void QuitThread()
-	{
-		m_bQuitThread = true;
-	}
 
-
+	/**
+	@brief Endless loop function to generate the PWM (to be executed in a separated thread)
+	**/
 	void PWMThread()
 	{
 		int nDelayPwmUS = (1.f/m_fPWMFreq)*1000000;
@@ -84,7 +82,6 @@ public:
 		float fCalculSimplification = (100-m_fMotorMinSpeed)/10000;
 		while(!m_bQuitThread)
 		{
-			std::cout<<"Thread!"<<std::endl;
 			//Init timer
 			gettimeofday(&begin, NULL);
 
@@ -134,6 +131,22 @@ public:
 
 	}
 
+	/**
+	@brief Enable the thread execution (done when initializing object)
+	**/
+	void EnableThread()
+	{
+		m_bQuitThread = false;
+	}
+
+	/**
+	@brief Stops the thread (quit endless loop)
+	**/
+	void QuitThread()
+	{
+		m_bQuitThread = true;
+	}
+
 private:
 	Motor* m_mot[4];
 	float m_fMotorMinSpeed;
@@ -152,6 +165,7 @@ private:
 void* MotorsThreadWrapper(void* obj)
 {
 	Motors* mot = reinterpret_cast<Motors*>(obj);
+	mot->EnableThread();
 	mot->PWMThread();
 }
 

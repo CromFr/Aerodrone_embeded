@@ -6,6 +6,9 @@
 class Sensors
 {
 public:
+	/**
+	@brief Inits the sensors (accelerometer & gyroscope)
+	**/
 	Sensors(const ConfigFile& cfg)
 	{
 		for(int i=0 ; i<8 ; i++)
@@ -19,9 +22,13 @@ public:
 		m_nCurrentSelectPinsState[0] = false;
 		m_nCurrentSelectPinsState[1] = false;
 
-		// @todo (crom#1#): Set select pins to 0
+		// @todo (crom#1#): Set select pins to 0 & set pin states to 0
 	}
 
+	/**
+	@brief Get the current accelerometer value in G-unit (1=gravity)
+	@note May take a little time processing (SEN_SelectionDelay)
+	**/
 	float GetAcceleroX()
 	{
 		ChangeSelection(0,0);
@@ -47,7 +54,6 @@ private:
 		if(!(m_nCurrentSelectPinsState[0] == 0 && m_nCurrentSelectPinsState[1] == 0))
 		{
 			// @todo (crom#1#): Set select pins to 00
-			//Wait m_fSelectionDelay
 			nanosleep(&selectionDelay, NULL);// @note (crom#1#): SegFault?
 		}
 	}
