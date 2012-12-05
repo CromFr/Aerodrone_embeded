@@ -44,6 +44,8 @@ private:
 
 };
 
+void* MotorsThreadWrapper(void* obj);
+
 class Motors
 {
 public:
@@ -63,9 +65,7 @@ public:
 
 		m_fProcessPrecision = cfg.GetValue<float>("MOT_PwmPrecision") * 100.0;
 
-		m_bQuitThread = false;
-
-
+		m_bQuitThread = true;
 	}
 
 
@@ -82,6 +82,8 @@ public:
 		float fCalculSimplification = (100-m_fMotorMinSpeed)/10000;
 		while(!m_bQuitThread)
 		{
+			std::cout<<"Mot";
+
 			//Init timer
 			gettimeofday(&begin, NULL);
 
@@ -110,6 +112,8 @@ public:
 			do
 			{
 				gettimeofday(&current, NULL);
+
+				if(current.tv_usec < begin.tv_usec)current.tv_usec+=1000000;
 				nElapsedTimeUS = current.tv_usec - begin.tv_usec;
 
 				for(short i=0 ; i<4 ; i++)
@@ -132,11 +136,19 @@ public:
 	}
 
 	/**
-	@brief Enable the thread execution (done when initializing object)
+
 	**/
-	void EnableThread()
+	void StartThread()
 	{
-		m_bQuitThread = false;
+		if(m_bQuitThread)
+		{
+			m_bQuitThread = false;
+			pthread_create(&m_thread, NULL , MotorsThreadWrapper, this);
+		}
+		else
+		{
+			std::cerr<<__FILE__<<" @ "<<__LINE__<<" : A thread is already running"<<std::endl;
+		}
 	}
 
 	/**
@@ -144,7 +156,20 @@ public:
 	**/
 	void QuitThread()
 	{
-		m_bQuitThread = true;
+		if(!m_bQuitThread)
+		{
+			m_bQuitThread = true;
+		}
+		else
+		{
+			std::cerr<<__FILE__<<" @ "<<__LINE__<<" : There is no thread to quit"<<std::endl;
+		}
+	}
+
+
+	void SetSpeed(int motID, float fPercent)
+	{
+		m_mot[motID-1]->SetSpeed(fPercent);
 	}
 
 private:
@@ -154,6 +179,7 @@ private:
 
 	float m_fPWMFreq;
 	bool m_bQuitThread;
+	pthread_t m_thread;
 
 
 
@@ -165,8 +191,8 @@ private:
 void* MotorsThreadWrapper(void* obj)
 {
 	Motors* mot = reinterpret_cast<Motors*>(obj);
-	mot->EnableThread();
 	mot->PWMThread();
+	return 0;
 }
 
 #endif // MOTORS_HPP_INCLUDED

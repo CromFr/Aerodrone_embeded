@@ -34,12 +34,19 @@ public:
 		ChangeSelection(0,0);
 		int nValue;//The byte of the pins
 		//Convert nValue to fAccel in G unit
-		float fAccel = 0.0;
-		return fAccel;
+		m_fAccelX = 0.0;
+		return m_fAccelX;
 	}
 
 	//...........
 
+	/**
+	@brief Same as GetAcceleroX but doesn't select the sensor. This is usefull when GetAcceleroX is called periodically.
+	**/
+	float GetLastAcceleroX()
+	{
+		return m_fAccelX;
+	}
 
 
 
@@ -64,6 +71,8 @@ private:
 	bool m_nCurrentSelectPinsState[2];
 
 	struct timespec selectionDelay;
+
+	float m_fAccelX, m_fAccelY, m_fAccelZ
 
 
 

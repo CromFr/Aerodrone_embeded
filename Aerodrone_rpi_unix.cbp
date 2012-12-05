@@ -27,6 +27,18 @@
 					<Add option="-s" />
 				</Linker>
 			</Target>
+			<Target title="RPi">
+				<Option output="bin/RPi/Aerodrone_rpi_unix" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/RPi/" />
+				<Option type="1" />
+				<Option compiler="raspberry_pi" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
@@ -35,21 +47,27 @@
 		<Linker>
 			<Add option="-lpthread" />
 		</Linker>
-		<Unit filename="./Motors.hpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="./Sensors.hpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="./timetools.h">
+		<Unit filename="./Vector3D.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="ConfigFile.cpp" />
 		<Unit filename="ConfigFile.hpp" />
+		<Unit filename="Motors.hpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Sensors.hpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Stabilizer.hpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="config.cfg">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="main.cpp" />
+		<Unit filename="timetools.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Extensions>
 			<envvars />
 			<code_completion />
