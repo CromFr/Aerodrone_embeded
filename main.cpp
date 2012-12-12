@@ -1,30 +1,40 @@
-#include <pthread.h>
-
-#include "ConfigFile.hpp"
-#include "Motors.hpp"
-#include "Sensors.hpp"
-#include "Stabilizer.hpp"
-
-#include <unistd.h>
+//#include <pthread.h>
 //
-//#include <boost/bind.hpp>
-//#include <boost/shared_ptr.hpp>
-//#include <boost/enable_shared_from_this.hpp>
-//#include <boost/asio.hpp>
+//#include "ConfigFile.hpp"
+//#include "Motors.hpp"
+//#include "Sensors.hpp"
+//#include "SensorManager.hpp"
+//
+//
+//#include <unistd.h>
 
+#include <iostream>
+#include <cstdlib>
+
+#include "Device.hpp"
 
 int main()
 {
 	std::cout<<"Program starts !"<<std::endl;
 
-	ConfigFile cfg;
-	cfg.Load("./config.cfg", false);
+	#ifndef TRG_DEBUG
+	if(getuid()!=0)
+	{
+		std::cerr<<"This program must be run as root in order to command pinout\nDo you want to continue? [y/n]"<<std::endl;
+		char c;
+		std::cin>>c;
+		if(c!='y' && c!='Y')
+		{
+			std::cerr<<"Exiting program due to unprivileged execution"<<std::endl;
+			return 0;
+		}
+
+	}
+	#endif // TRG_DEBUG
 
 
-	Motors mot(cfg);
-	Sensors sen(cfg);
-	Stabilizer stab(cfg, &mot, &sen);
-	stab.StartStabilization();
+	Device dev;
+	dev.StartStabilization();
 
 	bool bQuit(false);
 	while(!bQuit)

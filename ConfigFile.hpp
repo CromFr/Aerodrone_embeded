@@ -79,9 +79,9 @@ class ConfigFile
 	**/
 	enum Error
 	{
-		no_error,
-		file_not_found,
-		file_not_opened
+		no_error=0,
+		file_not_found=1,
+		file_not_opened=2
 	};
 
     /**

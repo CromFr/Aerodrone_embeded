@@ -7,57 +7,67 @@
 //#include <unistd.h>
 #include "ConfigFile.hpp"
 
-class Motor
-{
-public:
-	Motor(int nPin)
-	{
-		m_nPin = nPin;
-		m_fSpeed = 0;
-	}
+#include <WiringPi.h>
 
-	/**
-	@brief Change the speed of the motor
-	@param fSpeed100 Speed to set, out of 100
-	**/
-	void SetSpeed(float fSpeed100)
-	{
-		m_fSpeed = fSpeed100;
-	}
+//pinMode(pin, OUTPUT);
+//digitalWrite(pin, 1);
 
-	/**
-	@brief Returns the current speed of the motor
-	**/
-	float GetSpeed()
-	{
-		return m_fSpeed;
-	}
 
-	int GetPin()
-	{
-		return m_nPin;
-	}
 
-private:
-	int m_nPin;
-	float m_fSpeed;
-
-};
 
 void* MotorsThreadWrapper(void* obj);
 
 class Motors
 {
+private:
+	class Motor
+	{
+	public:
+		Motor(int nPin)
+		{
+			m_nPin = nPin;
+			pinMode(nPin, OUTPUT);
+			digitalWrite(nPin, 0);
+
+			m_fSpeed = 0;
+		}
+
+		/**
+		@brief Change the speed of the motor
+		@param fSpeed100 Speed to set, out of 100
+		**/
+		void SetSpeed(float fSpeed100)
+		{
+			m_fSpeed = fSpeed100;
+		}
+
+		/**
+		@brief Returns the current speed of the motor
+		**/
+		float GetSpeed()
+		{
+			return m_fSpeed;
+		}
+
+		int GetPin()
+		{
+			return m_nPin;
+		}
+
+	private:
+		int m_nPin;
+		float m_fSpeed;
+
+	};
+
 public:
 	/**
 	@brief Motors handler initialisation
 	**/
 	Motors(const ConfigFile& cfg)
 	{
-		m_mot[0] = new Motor(cfg.GetValue<int>("PIN_Motor0"));
-		m_mot[1] = new Motor(cfg.GetValue<int>("PIN_Motor1"));
-		m_mot[2] = new Motor(cfg.GetValue<int>("PIN_Motor2"));
-		m_mot[3] = new Motor(cfg.GetValue<int>("PIN_Motor3"));
+		for(int i=0 ; i<4 ; i++)
+			m_mot[i] = new Motor(cfg.GetValue<int>("PIN_Motors", i));
 
 		m_fMotorMinSpeed = cfg.GetValue<float>("MOT_MinSpeed")/100.f;
 
@@ -66,13 +76,20 @@ public:
 		m_fProcessPrecision = cfg.GetValue<float>("MOT_PwmPrecision") * 100.0;
 
 		m_bQuitThread = true;
+
+
+	}
+	~Motors()
+	{
+		for(int i=0 ; i<4 ; i++)
+			delete m_mot[i];
 	}
 
 
 	/**
 	@brief Endless loop function to generate the PWM (to be executed in a separated thread)
 	**/
-	void PWMThread()
+	void PWMThread()//TODO enregistrer pins dans la ram plutot que de les récup via mot à chaque fois
 	{
 		int nDelayPwmUS = (1.f/m_fPWMFreq)*1000000;
 
@@ -82,14 +99,12 @@ public:
 		float fCalculSimplification = (100-m_fMotorMinSpeed)/10000;
 		while(!m_bQuitThread)
 		{
-			std::cout<<"Mot";
-
 			//Init timer
 			gettimeofday(&begin, NULL);
 
 			//Init pins to LO
 			for(short i=0 ; i<4 ; i++)
-				m_mot[i]->GetPin();//->SET TO LO
+				digitalWrite(m_mot[i]->GetPin(), false);
 
 
 			//Calculating delays for the motors
@@ -120,7 +135,7 @@ public:
 				{
 					if(bMot[i] && nElapsedTimeUS >= fDelayMotUS[i])
 					{
-						m_mot[i]->GetPin();//->SET TO HI
+						digitalWrite(m_mot[i]->GetPin(), true);
 						bMot[i] = false;
 					}
 				}

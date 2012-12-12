@@ -16,11 +16,15 @@ public:
 		m_mot = mot;
 		m_sen = sen;
 		m_bQuitThread=true;
+		m_fGlobalMotorSpeed=0;
+		m_fZRotCompensation=0;
 
 		sleepTime.tv_sec = 0;
 		sleepTime.tv_nsec = cfg.GetValue<int>("STA_SleepTime")*1000;
 
 		m_fSensibility = cfg.GetValue<float>("STA_Sensibility");
+		m_fRotSensibility = cfg.GetValue<float>("STA_RotSensibility");
+
 	}
 
 	/**
@@ -96,6 +100,7 @@ private:
 	float m_fZRotCompensation;
 
 	float m_fSensibility;
+	float m_fRotSensibility;
 
 	struct timespec sleepTime;
 
@@ -110,9 +115,12 @@ private:
 		float fAccX = m_sen->GetAcceleroX();
 		float fAccY = m_sen->GetAcceleroX();
 		float fAccZ = m_sen->GetAcceleroX();//@TODO change to x, y z when implemented
+		float fRot = m_sen->GetAcceleroX();//@TODO change to rotation
 
 		Vector3D<float> vInclinaison(fAccX, fAccY, fAccZ);
 		vInclinaison.Normalize();
+
+		m_fZRotCompensation+=m_fRotSensibility*fRot; //@note may need some better calculus ;)
 
 		float fSpeed[4] = {
 							m_fGlobalMotorSpeed + m_fZRotCompensation/2.f + vInclinaison.PlanGetZAt(28.25, 28.25),

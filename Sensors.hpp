@@ -26,27 +26,23 @@ public:
 	}
 
 	/**
-	@brief Get the current accelerometer value in G-unit (1=gravity)
+	@brief Get the current accelerometer value in meter.sec-2
 	@note May take a little time processing (SEN_SelectionDelay)
 	**/
-	float GetAcceleroX()
+	double GetAcceleroX()
 	{
 		ChangeSelection(0,0);
 		int nValue;//The byte of the pins
-		//Convert nValue to fAccel in G unit
 		m_fAccelX = 0.0;
 		return m_fAccelX;
 	}
 
 	//...........
 
-	/**
-	@brief Same as GetAcceleroX but doesn't select the sensor. This is usefull when GetAcceleroX is called periodically.
-	**/
-	float GetLastAcceleroX()
-	{
-		return m_fAccelX;
-	}
+	//TODO Implement this
+	double GetAcceleroY(){return 0;}
+	double GetAcceleroZ(){return 0;}
+	double GetGyro(){return 0;}
 
 
 
@@ -72,7 +68,7 @@ private:
 
 	struct timespec selectionDelay;
 
-	float m_fAccelX, m_fAccelY, m_fAccelZ
+	float m_fAccelX, m_fAccelY, m_fAccelZ;
 
 
 

@@ -1,27 +1,25 @@
 # depslib dependency file v1.0
-1354720769 source:/home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/main.cpp
-	<pthread.h>
-	"ConfigFile.hpp"
-	"Motors.hpp"
-	"Sensors.hpp"
-	"Stabilizer.hpp"
-	<unistd.h>
+1355326925 source:/home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/main.cpp
+	<iostream>
+	<cstdlib>
+	"Device.hpp"
 
 1349465318 source:/home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/ConfigFile.cpp
 	"ConfigFile.hpp"
 
-1349464622 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/ConfigFile.hpp
+1354961028 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/ConfigFile.hpp
 	<iostream>
 	<fstream>
 	<sstream>
 	<vector>
 
-1354722281 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Motors.hpp
+1355325743 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Motors.hpp
 	<iostream>
 	<sys/time.h>
 	"ConfigFile.hpp"
+	<WiringPi.h>
 
-1353494384 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Sensors.hpp
+1354994428 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Sensors.hpp
 	"ConfigFile.hpp"
 
 1236010540 /home/crom/Bureau/ClubElec/include//boost/bind.hpp
@@ -5507,11 +5505,40 @@
 	<boost/asio/detail/push_options.hpp>
 	<boost/asio/detail/pop_options.hpp>
 
-1354720733 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Stabilizer.hpp
+1354723991 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Stabilizer.hpp
 	<sys/time.h>
 	"ConfigFile.hpp"
 	"Vector3D.hpp"
 
-1354708394 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Vector3D.hpp
+1355151479 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Vector3D.hpp
 	<cmath>
+
+1355151413 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/SensorManager.hpp
+	"Sensors.hpp"
+	"timetools.h"
+	"Vector3D.hpp"
+
+1352987860 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/timetools.h
+	<ctime>
+
+1355155140 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Device.hpp
+	<iostream>
+	<pthread.h>
+	<unistd.h>
+	<WiringPi.h>
+	"Motors.hpp"
+	"SensorManager.hpp"
+	"Device.Stabilization.hpp"
+
+1355154572 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Device.Stabilization.hpp
+
+1355152541 /home/crom/Bureau/ClubElec/precompiled/x64/include/WiringPi.h
+	<wiringPi.h>
+
+1355152541 /home/crom/Bureau/ClubElec/precompiled/x64/include/wiringPi.h
+
+1355152493 /home/crom/Bureau/ClubElec/precompiled/armhf/include/WiringPi.h
+	<wiringPi.h>
+
+1355152493 /home/crom/Bureau/ClubElec/precompiled/armhf/include/wiringPi.h
 
