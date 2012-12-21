@@ -13,6 +13,8 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DTRG_DEBUG" />
+					<Add option="-DDISABLE_PINS" />
 					<Add directory="../precompiled/x64/include" />
 				</Compiler>
 				<Linker>
@@ -26,6 +28,8 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DTRG_RELEASE" />
+					<Add option="-DDISABLE_PINS" />
 					<Add directory="../precompiled/x64/include" />
 				</Compiler>
 				<Linker>
@@ -40,6 +44,7 @@
 				<Option compiler="raspberry_pi" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DTRG_RELEASE" />
 					<Add directory="../precompiled/armhf/include" />
 				</Compiler>
 				<Linker>
@@ -75,9 +80,6 @@
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="Stabilizer.hpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="Thread.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="Vector3D.hpp">

@@ -18,6 +18,7 @@ class Device
 {
 public:
 	Device();//Defined in the cpp like
+	~Device();//Defined in the cpp like
 	static Device* m_instance;
 	inline static Device* GetDevice();//Defined in the cpp like
 
@@ -73,12 +74,7 @@ private:
 
 };
 
-void* StabilizerThreadWrapper(void* obj)
-{
-	Device* dev = reinterpret_cast<Device*>(obj);
-	dev->StabThread();
-	return 0;
-}
+
 
 
 
@@ -119,6 +115,7 @@ Device::Device()
 	//Hardware
 	m_mot = new Motors(m_cfg);
 	m_sen = new SensorManager(m_cfg);
+	m_sen->StartThread();
 
 	//Stabilisation
 	m_bQuitThread=true;
@@ -126,10 +123,15 @@ Device::Device()
 	m_fZRotCompensation=0;
 
 	sleepTime.tv_sec = 0;
-	sleepTime.tv_nsec = m_cfg.GetValue<float>("STA_SleepTime")*1000;
+	sleepTime.tv_nsec = m_cfg.GetValue<float>("STA_SleepTime")*1000.0;
 	m_fSensibility = m_cfg.GetValue<float>("STA_Sensibility");
 	m_fRotSensibility = m_cfg.GetValue<float>("STA_RotSensibility");
 
+}
+Device::~Device()
+{
+	delete m_mot;
+	delete m_sen;
 }
 
 #endif // DEVICE_HPP_INCLUDED

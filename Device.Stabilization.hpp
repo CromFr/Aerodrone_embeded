@@ -7,7 +7,7 @@ public:
 		if(m_bQuitThread)
 		{
 			m_bQuitThread=false;
-			pthread_create(&m_thread, NULL , StabilizerThreadWrapper, this);
+			pthread_create(&m_thread, NULL , Device::StabilizerThreadWrapper, this);
 
 			m_mot->StartThread();
 		}
@@ -16,10 +16,15 @@ public:
 			std::cerr<<__FILE__<<" @ "<<__LINE__<<" : The thread is already running"<<std::endl;
 		}
 	}
+private:
+	static void* StabilizerThreadWrapper(void* obj)
+	{
+		Device* dev = reinterpret_cast<Device*>(obj);
+		dev->StabThread();
+		return 0;
+	}
 
-	/**
-	@warning Do not call this function!
-	**/
+
 	void StabThread()
 	{
 		while(!m_bQuitThread)
@@ -30,9 +35,9 @@ public:
 		}
 	}
 
-private:
 	void ProcessStabilization()
 	{
+
 		Vector3D<double> fAcc(m_sen->GetAcceleration());
 		float fRotSpeed = m_sen->GetAngularSpeed();
 
@@ -72,7 +77,6 @@ private:
 			m_mot->SetSpeed(i+1, fSpeed[i]);
 		}
 	}
-
 
 
 

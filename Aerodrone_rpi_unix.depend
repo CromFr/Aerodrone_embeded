@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1355326925 source:/home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/main.cpp
+1355326965 source:/home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/main.cpp
 	<iostream>
 	<cstdlib>
 	"Device.hpp"
@@ -13,13 +13,13 @@
 	<sstream>
 	<vector>
 
-1355325743 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Motors.hpp
+1356079894 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Motors.hpp
 	<iostream>
 	<sys/time.h>
 	"ConfigFile.hpp"
 	<WiringPi.h>
 
-1354994428 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Sensors.hpp
+1356083140 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Sensors.hpp
 	"ConfigFile.hpp"
 
 1236010540 /home/crom/Bureau/ClubElec/include//boost/bind.hpp
@@ -5513,7 +5513,7 @@
 1355151479 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Vector3D.hpp
 	<cmath>
 
-1355151413 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/SensorManager.hpp
+1355331913 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/SensorManager.hpp
 	"Sensors.hpp"
 	"timetools.h"
 	"Vector3D.hpp"
@@ -5521,7 +5521,7 @@
 1352987860 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/timetools.h
 	<ctime>
 
-1355155140 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Device.hpp
+1355331702 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Device.hpp
 	<iostream>
 	<pthread.h>
 	<unistd.h>
@@ -5530,10 +5530,9 @@
 	"SensorManager.hpp"
 	"Device.Stabilization.hpp"
 
-1355154572 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Device.Stabilization.hpp
+1355331828 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Device.Stabilization.hpp
 
-1355152541 /home/crom/Bureau/ClubElec/precompiled/x64/include/WiringPi.h
-	<wiringPi.h>
+1355328269 /home/crom/Bureau/ClubElec/precompiled/x64/include/WiringPi.h
 
 1355152541 /home/crom/Bureau/ClubElec/precompiled/x64/include/wiringPi.h
 
