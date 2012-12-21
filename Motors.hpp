@@ -9,9 +9,6 @@
 
 #include <WiringPi.h>
 
-//pinMode(pin, OUTPUT);
-//digitalWrite(pin, 1);
-
 
 
 
@@ -139,13 +136,13 @@ public:
 						bMot[i] = false;
 					}
 				}
-				nanosleep(&sleepTime, NULL);// @note (crom#1#): SegFault?
+				nanosleep(&sleepTime, NULL);
 			}while(nElapsedTimeUS <= nDelayPwmUS);
 		}
 
 		for(short i=0 ; i<4 ; i++)
 		{
-			//->SET PINS TO LOW
+			digitalWrite(m_mot[i]->GetPin(), false);
 		}
 
 	}
@@ -157,12 +154,13 @@ public:
 	{
 		if(m_bQuitThread)
 		{
+			std::cout<<"-> Starting Motors Thread !"<<std::endl;
 			m_bQuitThread = false;
-			pthread_create(&m_thread, NULL , MotorsThreadWrapper, this);
+			pthread_create(&m_thread, NULL , Motors::MotorsThreadWrapper, this);
 		}
 		else
 		{
-			std::cerr<<__FILE__<<" @ "<<__LINE__<<" : A thread is already running"<<std::endl;
+			std::cerr<<"Motors::StartThread() : A thread is already running"<<std::endl;
 		}
 	}
 
@@ -174,10 +172,11 @@ public:
 		if(!m_bQuitThread)
 		{
 			m_bQuitThread = true;
+			std::cout<<"/!\\ > Exiting Motors Thread !"<<std::endl;
 		}
 		else
 		{
-			std::cerr<<__FILE__<<" @ "<<__LINE__<<" : There is no thread to quit"<<std::endl;
+			std::cerr<<"Motors::StartThread() : There is no thread to quit / The thread is currently exiting"<<std::endl;
 		}
 	}
 
@@ -193,6 +192,13 @@ private:
 	float m_fProcessPrecision;
 
 	float m_fPWMFreq;
+
+	static void* MotorsThreadWrapper(void* obj)
+	{
+		Motors* mot = reinterpret_cast<Motors*>(obj);
+		mot->PWMThread();
+		return 0;
+	}
 	bool m_bQuitThread;
 	pthread_t m_thread;
 
@@ -203,11 +209,6 @@ private:
 
 };
 
-void* MotorsThreadWrapper(void* obj)
-{
-	Motors* mot = reinterpret_cast<Motors*>(obj);
-	mot->PWMThread();
-	return 0;
-}
+
 
 #endif // MOTORS_HPP_INCLUDED
