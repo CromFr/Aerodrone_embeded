@@ -86,7 +86,7 @@ public:
 	/**
 	@brief Endless loop function to generate the PWM (to be executed in a separated thread)
 	**/
-	void PWMThread()//TODO enregistrer pins dans la ram plutot que de les récup via mot à chaque fois
+	void PWMThread()
 	{
 		int nDelayPwmUS = (1.f/m_fPWMFreq)*1000000;
 

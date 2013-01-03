@@ -88,7 +88,8 @@ private:
 	{
 		if(!(m_nCurrentSelectPinsState[0] == 0 && m_nCurrentSelectPinsState[1] == 0))
 		{
-			// @todo (crom#1#): Set select pins to 00
+			digitalWrite(m_nSelectPins[0], b0);
+			digitalWrite(m_nSelectPins[1], b1);
 			nanosleep(&selectionDelay, NULL);
 		}
 	}
