@@ -41,6 +41,18 @@ public:
 		return x*x+y*y+z*z;
 	}
 
+	Vector3D<T> operator+(const Vector3D<T>& other){return Vector3D<T>(this->x+other.x, this->y+other.y, this->z+other.z);}
+	void operator+=(const Vector3D<T>& other){this->x+=other.x; this->y+=other.y; this->z+=other.z;}
+
+	Vector3D<T> operator-(const Vector3D<T>& other){return Vector3D<T>(this->x-other.x, this->y-other.y, this->z-other.z);}
+	void operator-=(const Vector3D<T>& other){this->x-=other.x; this->y-=other.y; this->z-=other.z;}
+
+	Vector3D<T> operator*(const T& other){return Vector3D<T>(this->x*other, this->y*other, this->z*other);}
+	Vector3D<T> operator*=(const T& other){this->x*=other; this->y*=other; this->z*=other;}
+
+	Vector3D<T> operator/(const T& other){return (*this)*(1/other);}
+	Vector3D<T> operator/=(const T& other){(*this)*=(1/other);}
+
 private:
 
 
