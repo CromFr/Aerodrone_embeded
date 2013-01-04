@@ -39,8 +39,7 @@ public:
 		m_fSpeed.Set(0,0,0);
 		m_fSpeedRot=0;
 
-		Vector3D<double> accel(m_sen.GetAcceleroX(), m_sen.GetAcceleroY(), m_sen.GetAcceleroZ());
-		m_fGravityAccel = accel.GetLength();
+		m_vGravityAccel = Vector3D<double>(m_sen.GetAcceleroX(), m_sen.GetAcceleroY(), m_sen.GetAcceleroZ());
 	}
 
 	/**
@@ -93,9 +92,9 @@ public:
 		return m_fAccel;
 	}
 
-	double GetGravityAcceleration()
+	Vector3D<double> GetGravityAcceleration()
 	{
-		return m_fGravityAccel;
+		return m_vGravityAccel;
 	}
 
 	void StartThread()
@@ -150,7 +149,7 @@ private:
 	//In meter.sec-2
 	Vector3D<double> m_fAccel;
 
-	double m_fGravityAccel;
+	Vector3D<double> m_vGravityAccel;
 
 
 	//============> Threading
@@ -179,9 +178,9 @@ private:
 			gettimeofday(&gyro, NULL);
 
 
-			m_fSpeed.x += m_fAccel.x*nElapsedAX/1000.f;
-			m_fSpeed.y += m_fAccel.y*nElapsedAY/1000.f;
-			m_fSpeed.z += (m_fAccel.z-m_fGravityAccel)*nElapsedAZ/1000.f;
+			m_fSpeed.x += (m_fAccel.x-m_vGravityAccel.x)*nElapsedAX/1000.f;
+			m_fSpeed.y += (m_fAccel.y-m_vGravityAccel.y)*nElapsedAY/1000.f;
+			m_fSpeed.z += (m_fAccel.z-m_vGravityAccel.z)*nElapsedAZ/1000.f;
 
 			m_fPos.x += m_fSpeed.x*nElapsedAX/1000.f;
 			m_fPos.y += m_fSpeed.y*nElapsedAY/1000.f;
