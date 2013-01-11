@@ -1,15 +1,12 @@
-#ifndef DEVICE_STABILIZATION_HPP_INCLUDED
-#define DEVICE_STABILIZATION_HPP_INCLUDED
+
 
 public:
 	void StartStabilization()
 	{
-		if(m_bQuitThread)
+		if(m_bQuitStabThread)
 		{
-			m_bQuitThread=false;
-			pthread_create(&m_thread, NULL , Device::StabilizerThreadWrapper, this);
-
-			m_mot->StartThread();
+			m_bQuitStabThread=false;
+			pthread_create(&m_threadStab, NULL , Device::StabilizerThreadWrapper, this);
 		}
 		else
 		{
@@ -27,11 +24,11 @@ private:
 
 	void StabThread()
 	{
-		while(!m_bQuitThread)
+		while(!m_bQuitStabThread)
 		{
-			std::cout<<"Stab";
+			std::cout<<"S";
 			ProcessStabilization();
-			nanosleep(&sleepTime, NULL);
+			nanosleep(&stabSleepTime, NULL);
 		}
 	}
 
@@ -88,13 +85,9 @@ private:
 	float m_fSensibility;
 	float m_fRotSensibility;
 
-	struct timespec sleepTime;
+	struct timespec stabSleepTime;
 
-	bool m_bQuitThread;
-	pthread_t m_thread;
-
-
+	bool m_bQuitStabThread;
+	pthread_t m_threadStab;
 
 
-
-#endif // DEVICE_STABILIZATION_HPP_INCLUDED

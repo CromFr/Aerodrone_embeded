@@ -26,7 +26,7 @@ int main()
 		if(c!='y' && c!='Y')
 		{
 			std::cerr<<"Exiting program due to unprivileged execution"<<std::endl;
-			return 0;
+			return 255;
 		}
 
 	}
@@ -34,7 +34,6 @@ int main()
 
 
 	Device dev;
-	dev.StartStabilization();
 
 	bool bQuit(false);
 	while(!bQuit)

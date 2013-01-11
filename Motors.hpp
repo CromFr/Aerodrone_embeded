@@ -186,6 +186,11 @@ public:
 		m_mot[motID-1]->SetSpeed(fPercent);
 	}
 
+	float GetSpeed(int motID)
+	{
+		return m_mot[motID-1]->GetSpeed();
+	}
+
 private:
 	Motor* m_mot[4];
 	float m_fMotorMinSpeed;

@@ -160,7 +160,7 @@ private:
 		accelY = accelX; accelZ = accelX; gyro = accelX;
 		while(!m_bQuitThread)
 		{
-			std::cout<<"Integ";
+			std::cout<<"I";
 			m_fAccel.x = m_sen.GetAcceleroX();
 			int nElapsedAX = GetElapsedTimeUSSince(&accelX);
 			gettimeofday(&accelX, NULL);

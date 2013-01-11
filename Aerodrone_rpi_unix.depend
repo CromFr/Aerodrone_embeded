@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1355326965 source:/home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/main.cpp
+1355326964 source:/home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/main.cpp
 	<iostream>
 	<cstdlib>
 	"Device.hpp"
@@ -13,13 +13,13 @@
 	<sstream>
 	<vector>
 
-1357146333 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Motors.hpp
+1357146332 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Motors.hpp
 	<iostream>
 	<sys/time.h>
 	"ConfigFile.hpp"
 	<WiringPi.h>
 
-1357233267 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Sensors.hpp
+1357233266 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Sensors.hpp
 	"ConfigFile.hpp"
 
 1236010540 /home/crom/Bureau/ClubElec/include//boost/bind.hpp
@@ -5510,10 +5510,10 @@
 	"ConfigFile.hpp"
 	"Vector3D.hpp"
 
-1357232937 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Vector3D.hpp
+1357232936 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Vector3D.hpp
 	<cmath>
 
-1357146375 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/SensorManager.hpp
+1357146374 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/SensorManager.hpp
 	"Sensors.hpp"
 	"timetools.h"
 	"Vector3D.hpp"
@@ -5521,16 +5521,21 @@
 1352987860 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/timetools.h
 	<ctime>
 
-1355331702 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Device.hpp
+1357835931 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Device.hpp
 	<iostream>
 	<pthread.h>
+	<string.h>
 	<unistd.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netinet/in.h>
 	<WiringPi.h>
 	"Motors.hpp"
 	"SensorManager.hpp"
 	"Device.Stabilization.hpp"
+	"Device.Network.hpp"
 
-1357318283 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Device.Stabilization.hpp
+1357829746 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Device.Stabilization.hpp
 
 1355328269 /home/crom/Bureau/ClubElec/precompiled/x64/include/WiringPi.h
 
@@ -5540,4 +5545,167 @@
 	<wiringPi.h>
 
 1355152493 /home/crom/Bureau/ClubElec/precompiled/armhf/include/wiringPi.h
+
+1349465318 source:/home/ssp/T0140327/Documents/Aerodrone_rpi_unix/ConfigFile.cpp
+	"ConfigFile.hpp"
+
+1354961028 /home/ssp/T0140327/Documents/Aerodrone_rpi_unix/ConfigFile.hpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<vector>
+
+1355326964 source:/home/ssp/T0140327/Documents/Aerodrone_rpi_unix/main.cpp
+	<iostream>
+	<cstdlib>
+	"Device.hpp"
+
+1357829988 /home/ssp/T0140327/Documents/Aerodrone_rpi_unix/Device.hpp
+	<iostream>
+	<pthread.h>
+	<unistd.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<WiringPi.h>
+	"Motors.hpp"
+	"SensorManager.hpp"
+	"Device.Stabilization.hpp"
+	"Device.Network.hpp"
+
+1357146332 /home/ssp/T0140327/Documents/Aerodrone_rpi_unix/Motors.hpp
+	<iostream>
+	<sys/time.h>
+	"ConfigFile.hpp"
+	<WiringPi.h>
+
+1357146374 /home/ssp/T0140327/Documents/Aerodrone_rpi_unix/SensorManager.hpp
+	"Sensors.hpp"
+	"timetools.h"
+	"Vector3D.hpp"
+
+1357233266 /home/ssp/T0140327/Documents/Aerodrone_rpi_unix/Sensors.hpp
+	"ConfigFile.hpp"
+
+1352987860 /home/ssp/T0140327/Documents/Aerodrone_rpi_unix/timetools.h
+	<ctime>
+
+1357232936 /home/ssp/T0140327/Documents/Aerodrone_rpi_unix/Vector3D.hpp
+	<cmath>
+
+1357829747 /home/ssp/T0140327/Documents/Aerodrone_rpi_unix/Device.Stabilization.hpp
+
+1355328268 /home/ssp/T0140327/Documents/precompiled/x64/include/WiringPi.h
+
+1357829916 /home/ssp/T0140327/Documents/Aerodrone_rpi_unix/Device.Network.hpp
+
+1357835847 /home/crom/Bureau/ClubElec/Aerodrone_rpi_unix/Device.Network.hpp
+
+1349465318 source:/run/media/T0140327/D71B-F00E/Aerodrone/Aerodrone_rpi_unix/ConfigFile.cpp
+	"ConfigFile.hpp"
+
+1354961028 /run/media/T0140327/D71B-F00E/Aerodrone/Aerodrone_rpi_unix/ConfigFile.hpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<vector>
+
+1355326964 source:/run/media/T0140327/D71B-F00E/Aerodrone/Aerodrone_rpi_unix/main.cpp
+	<iostream>
+	<cstdlib>
+	"Device.hpp"
+
+1357896506 /run/media/T0140327/D71B-F00E/Aerodrone/Aerodrone_rpi_unix/Device.hpp
+	<iostream>
+	<sstream>
+	<pthread.h>
+	<string.h>
+	<unistd.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<WiringPi.h>
+	"Motors.hpp"
+	"SensorManager.hpp"
+	"Device.Stabilization.hpp"
+	"Device.Network.hpp"
+
+1357898526 /run/media/T0140327/D71B-F00E/Aerodrone/Aerodrone_rpi_unix/Motors.hpp
+	<iostream>
+	<sys/time.h>
+	"ConfigFile.hpp"
+	<WiringPi.h>
+
+1357146374 /run/media/T0140327/D71B-F00E/Aerodrone/Aerodrone_rpi_unix/SensorManager.hpp
+	"Sensors.hpp"
+	"timetools.h"
+	"Vector3D.hpp"
+
+1357233266 /run/media/T0140327/D71B-F00E/Aerodrone/Aerodrone_rpi_unix/Sensors.hpp
+	"ConfigFile.hpp"
+
+1352987860 /run/media/T0140327/D71B-F00E/Aerodrone/Aerodrone_rpi_unix/timetools.h
+	<ctime>
+
+1357232936 /run/media/T0140327/D71B-F00E/Aerodrone/Aerodrone_rpi_unix/Vector3D.hpp
+	<cmath>
+
+1357829746 /run/media/T0140327/D71B-F00E/Aerodrone/Aerodrone_rpi_unix/Device.Stabilization.hpp
+
+1357901437 /run/media/T0140327/D71B-F00E/Aerodrone/Aerodrone_rpi_unix/Device.Network.hpp
+
+1349465318 source:/home/ssp/T0140327/Desktop/Aerodrone_rpi_unix/ConfigFile.cpp
+	"ConfigFile.hpp"
+
+1354961028 /home/ssp/T0140327/Desktop/Aerodrone_rpi_unix/ConfigFile.hpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<vector>
+
+1357901775 source:/home/ssp/T0140327/Desktop/Aerodrone_rpi_unix/main.cpp
+	<iostream>
+	<cstdlib>
+	"Device.hpp"
+
+1357902296 /home/ssp/T0140327/Desktop/Aerodrone_rpi_unix/Device.hpp
+	<iostream>
+	<sstream>
+	<pthread.h>
+	<string.h>
+	<unistd.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<WiringPi.h>
+	"Motors.hpp"
+	"SensorManager.hpp"
+	"Device.Stabilization.hpp"
+	"Device.Network.hpp"
+
+1357898526 /home/ssp/T0140327/Desktop/Aerodrone_rpi_unix/Motors.hpp
+	<iostream>
+	<sys/time.h>
+	"ConfigFile.hpp"
+	<WiringPi.h>
+
+1357902191 /home/ssp/T0140327/Desktop/Aerodrone_rpi_unix/SensorManager.hpp
+	"Sensors.hpp"
+	"timetools.h"
+	"Vector3D.hpp"
+
+1357233266 /home/ssp/T0140327/Desktop/Aerodrone_rpi_unix/Sensors.hpp
+	"ConfigFile.hpp"
+
+1352987860 /home/ssp/T0140327/Desktop/Aerodrone_rpi_unix/timetools.h
+	<ctime>
+
+1357232936 /home/ssp/T0140327/Desktop/Aerodrone_rpi_unix/Vector3D.hpp
+	<cmath>
+
+1357902191 /home/ssp/T0140327/Desktop/Aerodrone_rpi_unix/Device.Stabilization.hpp
+
+1357902102 /home/ssp/T0140327/Desktop/Aerodrone_rpi_unix/Device.Network.hpp
+
+1355328268 /home/ssp/T0140327/Desktop/precompiled/x64/include/WiringPi.h
 
