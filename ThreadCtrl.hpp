@@ -2,7 +2,7 @@
 #define THREADCTRL_HPP_INCLUDED
 
 #include <iostream>
-#include <pthread.h>
+#include <thread>
 #include <signal.h>
 
 class ThreadCtrl
@@ -26,7 +26,7 @@ public:
 		if(m_bQuitThread)
 		{
 			m_bQuitThread=false;
-			pthread_create(&m_thread, NULL , ThreadCtrl::ThreadWrapper, this);
+			m_thread = new std::thread(ThreadWrapper, this);
 		}
 		else
 		{
@@ -43,7 +43,8 @@ public:
 	{
 		if(bKill)
 		{
-			pthread_kill(m_thread, 9);
+			//TODO pthread_kill(m_thread, 9);
+			delete m_thread;
 			m_bQuitThread=true;
 		}
 		else
@@ -86,10 +87,11 @@ private:
 			PostThreadProcess();
 		}
 		OnThreadEnd();
+		delete m_thread;
 	}
 
 	bool m_bQuitThread;
-	pthread_t m_thread;
+	std::thread* m_thread;
 
 
 };
