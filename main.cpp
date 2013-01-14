@@ -9,7 +9,6 @@
 //#include <unistd.h>
 
 #include <iostream>
-#include <cstdlib>
 
 #include "Device.hpp"
 
