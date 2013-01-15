@@ -23,7 +23,7 @@ private:
     void ProcessNetData(const char* data);
 
     void OnThreadStart();
-	void ThreadProcess();
+	virtual void ThreadProcess();
 
 
 	int m_nSockPort;
