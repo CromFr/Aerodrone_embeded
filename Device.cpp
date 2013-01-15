@@ -44,10 +44,10 @@ Device::Device()
 
     //Stabilisation
     m_stabctrl = new StabCtrl(cfg);
-    m_stabctrl->Start();
+    //m_stabctrl->Start();
 
     m_netctrl = new NetCtrl(cfg);
-    m_netctrl->Start();
+    //m_netctrl->Start();
 
 
 
@@ -66,7 +66,7 @@ Device::~Device()
 void Device::StartupRoutine()
 {
     struct timespec Delay; Delay.tv_sec=0; Delay.tv_nsec = 100000000;//every 0.1sec
-    for(int nMotorSpeed=0 ; nMotorSpeed<100 ; nMotorSpeed++)
+    for(int nMotorSpeed=0 ; nMotorSpeed<93 ; nMotorSpeed++)
     {
         m_mot->SetSpeed(1, nMotorSpeed);
         m_mot->SetSpeed(2, nMotorSpeed);

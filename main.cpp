@@ -1,14 +1,5 @@
-//#include <pthread.h>
-//
-//#include "ConfigFile.hpp"
-//#include "Motors.hpp"
-//#include "Sensors.hpp"
-//#include "SensorManager.hpp"
-//
-//
-//#include <unistd.h>
-
 #include <iostream>
+#include <unistd.h>
 
 #include "Device.hpp"
 
@@ -33,6 +24,7 @@ int main()
 
 
 	Device dev;
+	dev.StartupRoutine();
 
 	bool bQuit(false);
 	while(!bQuit)

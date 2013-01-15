@@ -43,7 +43,6 @@ public:
 	{
 		if(bKill)
 		{
-			//TODO pthread_kill(m_thread, 9);
 			delete m_thread;
 			m_bQuitThread=true;
 		}

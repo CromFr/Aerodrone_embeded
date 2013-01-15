@@ -20,7 +20,7 @@ public:
 
 private:
 
-	void ThreadProcess();
+	virtual void ThreadProcess();
 
 	void PostThreadProcess();
 
