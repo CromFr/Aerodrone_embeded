@@ -15,11 +15,9 @@
 					<Add option="-g" />
 					<Add option="-DTRG_DEBUG" />
 					<Add option="-DDISABLE_PINS" />
-					<Add directory="../precompiled/x64/include" />
 				</Compiler>
 				<Linker>
-					<Add option="-lWiringPi" />
-					<Add directory="../precompiled/x64/lib" />
+					<Add option="-lwiringPi_dis_x86" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -31,28 +29,24 @@
 					<Add option="-O2" />
 					<Add option="-DTRG_RELEASE" />
 					<Add option="-DDISABLE_PINS" />
-					<Add directory="../precompiled/x64/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lwiringPi" />
-					<Add directory="../precompiled/x64/lib" />
+					<Add option="-lwiringPi_x86" />
 				</Linker>
 			</Target>
 			<Target title="RPi">
 				<Option output="bin/RPi/Aerodrone_rpi_unix" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/RPi/" />
 				<Option type="1" />
-				<Option compiler="raspberry_pi" />
+				<Option compiler="rpi" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-DTRG_RELEASE" />
-					<Add directory="../precompiled/armhf/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lwiringPi" />
-					<Add directory="../precompiled/armhf/lib" />
+					<Add option="-lwiringPi_armhf" />
 				</Linker>
 			</Target>
 		</Build>
@@ -60,9 +54,11 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add option="-static" />
+			<Add directory="../api/include" />
 		</Compiler>
 		<Linker>
 			<Add option="-lpthread" />
+			<Add directory="../api/lib" />
 		</Linker>
 		<Unit filename="ConfigFile.cpp" />
 		<Unit filename="ConfigFile.hpp" />
@@ -70,20 +66,22 @@
 		<Unit filename="Device.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="Motors.cpp" />
-		<Unit filename="Motors.hpp">
+		<Unit filename="./Motor.hpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="MotorHdl.cpp" />
+		<Unit filename="MotorHdl.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="NetCtrl.cpp" />
-		<Unit filename="./NetCtrl.hpp">
+		<Unit filename="NetCtrl.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="SensorManager.cpp" />
-		<Unit filename="SensorManager.hpp">
+		<Unit filename="Sensor.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="Sensors.cpp" />
-		<Unit filename="Sensors.hpp">
+		<Unit filename="SensorHdl.cpp" />
+		<Unit filename="SensorHdl.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="StabCtrl.cpp" />

@@ -3,8 +3,8 @@
 #include <WiringPi.h>
 #include "StabCtrl.hpp"
 #include "NetCtrl.hpp"
-#include "Motors.hpp"
-#include "SensorManager.hpp"
+#include "MotorHdl.hpp"
+#include "SensorHdl.hpp"
 #include "ConfigFile.hpp"
 
 Device* Device::m_instance;
@@ -36,18 +36,18 @@ Device::Device()
 
 
     //Hardware
-    m_mot = new Motors(cfg);
-    m_sen = new SensorManager(cfg);
+    m_mot = new MotorHdl(cfg);
+    m_sen = new SensorHdl(cfg);
 
-    m_mot->StartThread();
-    m_sen->StartThread();
+    m_mot->Start();
+    m_sen->Start();
 
     //Stabilisation
     m_stabctrl = new StabCtrl(cfg);
     //m_stabctrl->Start();
 
     m_netctrl = new NetCtrl(cfg);
-    //m_netctrl->Start();
+    m_netctrl->Start();
 
 
 
@@ -79,13 +79,13 @@ void Device::StartupRoutine()
 
 
 
-void Device::OnErrorLand()
+void Device::OnErrorRoutine()
 {
     m_stabctrl->LandRoutine(4);
 }
 
 
-void Device::OnCriticalErrorLand()
+void Device::OnCriticalErrorRoutine()
 {
     m_stabctrl->LandRoutine(1);
 }

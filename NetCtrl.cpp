@@ -4,8 +4,8 @@
 #include <cstdint>
 
 #include "Device.hpp"
-#include "Motors.hpp"
-#include "SensorManager.hpp"
+#include "MotorHdl.hpp"
+#include "SensorHdl.hpp"
 #include "ConfigFile.hpp"
 
 

@@ -2,8 +2,8 @@
 
 #include "ConfigFile.hpp"
 #include "Device.hpp"
-#include "Motors.hpp"
-#include "SensorManager.hpp"
+#include "MotorHdl.hpp"
+#include "SensorHdl.hpp"
 
 StabCtrl::StabCtrl(ConfigFile* cfg)
 {
@@ -19,6 +19,10 @@ StabCtrl::StabCtrl(ConfigFile* cfg)
 
 void StabCtrl::LandRoutine(float fMaxSec)
 {
+    bool bThreadQuitting = GetIsThreadQuitting();
+    if(!bThreadQuitting)
+        Stop();
+
 	struct timespec Delay; Delay.tv_sec=0; Delay.tv_nsec = 10000000;
 	for( ; m_fGlobalMotorSpeed>0 ; m_fGlobalMotorSpeed-=10/(float)fMaxSec)
 	{
@@ -26,8 +30,7 @@ void StabCtrl::LandRoutine(float fMaxSec)
 		nanosleep(&Delay, NULL);
 	}
 	m_fGlobalMotorSpeed=0;
-	Device::GetMotors()->QuitThread();
-	Stop();
+	Device::GetMotors()->Stop();
 }
 
 

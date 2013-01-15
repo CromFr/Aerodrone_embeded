@@ -12,8 +12,8 @@ public:
     {
         m_bQuitThread = true;
     }
-
-    virtual ~ThreadCtrl()
+    //TODO Virtual or not?
+    ~ThreadCtrl()
     {
         Stop(true);
     }
@@ -73,11 +73,11 @@ private:
 	static void* ThreadWrapper(void* obj)
 	{
 		ThreadCtrl* ctrl = reinterpret_cast<ThreadCtrl*>(obj);
-		ctrl->Thread();
+		ctrl->ThreadFunction();
 		return 0;
 	}
 
-	void Thread()
+	void ThreadFunction()
 	{
 		OnThreadStart();
 		while(!m_bQuitThread)

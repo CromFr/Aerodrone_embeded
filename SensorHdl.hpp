@@ -5,13 +5,15 @@
 #include <sys/time.h>
 #include "Vector3D.hpp"
 
-class Sensors;
+#include "ThreadCtrl.hpp"
+
+class Sensor;
 class ConfigFile;
 
-class SensorManager
+class SensorHdl : public ThreadCtrl
 {
 public:
-	SensorManager(const ConfigFile* cfg);
+	SensorHdl(const ConfigFile* cfg);
 
 	/**
 	@brief The current position will be the origin
@@ -59,23 +61,25 @@ public:
 	**/
 	Vector3D<double> GetAcceleration();
 
+
 	Vector3D<double> GetGravityAcceleration();
-
-	void StartThread();
-
-	/**
-	@brief Quit the thread !
-	**/
-	void QuitThread();
 
 
 
 
 private:
-	Sensors* m_sen;
+	Sensor* m_sen;
 
-	struct timespec m_SleepTime;
+	void OnThreadStart();
+	void ThreadProcess();
+
+	struct timeval m_dateAccelX, m_dateAccelY, m_dateAccelZ, m_dateGyro;
+
+
+	struct timespec m_IntegSleepTime;
 	int GetElapsedTimeUSSince(struct timeval* begin);
+
+
 
 	//In millimeters or degrees
 	Vector3D<double> m_fPos;
@@ -89,24 +93,6 @@ private:
 	Vector3D<double> m_fAccel;
 
 	Vector3D<double> m_vGravityAccel;
-
-
-	//============> Threading
-	void Thread();
-	static void* ThreadWrapper(void* obj);
-
-	pthread_t m_thread;
-	bool m_bQuitThread;
-
-
-
-
-
-
-
-	int nSleepTime;
-
-
 
 };
 
