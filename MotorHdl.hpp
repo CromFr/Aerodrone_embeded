@@ -36,6 +36,7 @@ private:
 
 	float m_fMotorMinSpeed;
 	float m_fPWMFreq;
+	int m_nDelayPwmUS;
 	struct timespec m_PWMCheckSleep;
 
 

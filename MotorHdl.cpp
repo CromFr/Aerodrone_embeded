@@ -13,6 +13,7 @@ MotorHdl::MotorHdl(const ConfigFile* cfg)
 
     m_fMotorMinSpeed = cfg->GetValue<float>("MOT_MinSpeed")/100.f;
     m_fPWMFreq = cfg->GetValue<float>("MOT_PwmFreq");
+    m_nDelayPwmUS = (1.f/m_fPWMFreq)*1000000;
 
     m_PWMCheckSleep.tv_sec=0; m_PWMCheckSleep.tv_nsec=cfg->GetValue<float>("MOT_PwmPrecision") * 100000;
 }
@@ -26,9 +27,7 @@ MotorHdl::~MotorHdl()
 
 void MotorHdl::ThreadProcess()
 {
-    int nDelayPwmUS = (1.f/m_fPWMFreq)*1000000;
 
-    float fTmp;
     struct timeval begin, current;
 
     //Init pins to LO
@@ -43,19 +42,16 @@ void MotorHdl::ThreadProcess()
     int fDelayMotUS[4];
     for(short i=0 ; i<4 ; i++)
     {
-        fTmp = m_mot[i]->GetSpeed();
-        if(fTmp == 0)
-            fDelayMotUS[i] = 0;
-        else
-        {
-            //fDelayMotUS[i] = nDelayPwmUS*(1-((fTmp/100.f)*(100.f-m_fMotorMinSpeed)+35.f)/100.f);
-            fDelayMotUS[i] = nDelayPwmUS*(1-fTmp*(100-m_fMotorMinSpeed)/10000+0.35);
-        }
+		//fDelayMotUS[i] = nDelayPwmUS*(1-((fTmp/100.f)*(100.f-m_fMotorMinSpeed)+35.f)/100.f);
+		//fDelayMotUS[i] = nDelayPwmUS*(1-fTmp*(100-m_fMotorMinSpeed)/10000+0.35);
+
+		fDelayMotUS[i] = m_nDelayPwmUS*( (50+(m_mot[i]->GetSpeed()/2.0))/100.0  ); //NOTE m_fMotorMinSpeed not used
     }
 
 
     //Processing pwm
     bool bMot[4] = {true};
+    int nMot = 0;
     int nElapsedTimeUS;
     do
     {
@@ -64,16 +60,17 @@ void MotorHdl::ThreadProcess()
         if(current.tv_usec < begin.tv_usec)current.tv_usec+=1000000;
         nElapsedTimeUS = current.tv_usec - begin.tv_usec;
 
-        for(short i=0 ; i<4 ; i++)
+        for(short i=0 ; i<4 && nMot<4 ; i++)
         {
             if(bMot[i] && nElapsedTimeUS >= fDelayMotUS[i])
             {
                 m_mot[i]->SetPin(true);
+            	nMot++;
                 bMot[i] = false;
             }
         }
         nanosleep(&m_PWMCheckSleep, NULL);
-    }while(nElapsedTimeUS <= nDelayPwmUS);
+    }while(nElapsedTimeUS <= m_nDelayPwmUS);
 
 
 
