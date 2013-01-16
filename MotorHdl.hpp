@@ -9,7 +9,10 @@
 class ConfigFile;
 class Motor;
 
-
+/**
+@brief [Handler] Handles the motors PWM and allows to modify speeds
+@note The software PWM is generated in a separate thread
+**/
 class MotorHdl : public ThreadCtrl
 {
 
@@ -21,9 +24,18 @@ public:
 	~MotorHdl();
 
 
-
+    /**
+    @brief Change the speed of one motor
+    @arg motID The ID of the motor (from 1 to 4)
+    @arg fPercent The motor speed from 0 to 100
+    **/
 	void SetSpeed(int motID, float fPercent);
 
+    /**
+    @brief Gets the speed of one motor
+    @arg motID The ID of the motor (from 1 to 4)
+    @return The motor speed from 0 to 100
+    **/
 	float GetSpeed(int motID);
 
 private:

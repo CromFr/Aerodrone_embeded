@@ -8,11 +8,13 @@
 #include "SensorHdl.hpp"
 #include "ConfigFile.hpp"
 
+#include "StabCtrl.hpp"
+
 
 
 #define NET_INFOREQUEST (uint8_t)1
 #define NET_INFODATA (uint8_t)2
-#define NET_COMMAND_MOVE (uint8_t)3
+#define NET_CHANGEMOTORSPEED (uint8_t)3
 
 NetCtrl::NetCtrl(ConfigFile* cfg)
 {
@@ -27,6 +29,8 @@ void NetCtrl::OnThreadStart()
     if(m_sockServer < 0)
     {
         std::cerr<<__FILE__<<" @ "<<__LINE__<<" : Error while opening server socket ("/*<<strerror(errno)*/<<")"<<std::endl;
+        int nSeq[] = {200, 0, 200, 0, 200, 0, 200, 0, 200};
+        Device::GetDevice()->BipRoutine(nSeq, 9);
         sleep(5);
     }
 
@@ -39,6 +43,8 @@ void NetCtrl::OnThreadStart()
     if(bind(m_sockServer, (struct sockaddr *) &m_addrServer, sizeof(m_addrServer)) < 0)
     {
         std::cerr<<__FILE__<<" @ "<<__LINE__<<" : Error while binding server socket ("/*<<strerror(errno)*/<<")"<<std::endl;
+        int nSeq[] = {200, 0, 200, 0, 200, 0, 200, 0, 200};
+        Device::GetDevice()->BipRoutine(nSeq, 9);
         sleep(5);
     }
     listen(m_sockServer,5);
@@ -154,9 +160,16 @@ void NetCtrl::ProcessNetData(const char* data)
         //Should not happen
         std::cerr<<__FILE__<<" @ "<<__LINE__<<" : Received NET_INFODATA, and it should not happen"<<std::endl;
     }
-    else if(nAction == NET_COMMAND_MOVE)
+    else if(nAction == NET_CHANGEMOTORSPEED)
     {
-        //TODO Complete this
+        uint16_t nValue;
+        uint8_t nTmp;
+        sData.read((char*)(&nTmp), 1);
+        nValue = 256*nTmp;
+        sData.read((char*)(&nTmp), 1);
+        nValue+=nTmp;
+
+        Device::GetStabCtrl()->ChangeMotorSpeed(nValue/327.68 - 100.0);
     }
 
 

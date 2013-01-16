@@ -11,9 +11,10 @@ public:
     ThreadCtrl()
     {
         m_bQuitThread = true;
+        m_bThreadRunning = false;
     }
-    //TODO Virtual or not?
-    ~ThreadCtrl()
+
+    virtual ~ThreadCtrl()
     {
         Stop(true);
     }
@@ -21,7 +22,7 @@ public:
 	/**
 	@brief Starts the thread
 	**/
-	short Start()
+	short Start(bool bKill=false)
 	{
 		if(m_bQuitThread)
 		{
@@ -41,25 +42,27 @@ public:
 	**/
 	short Stop(bool bKill=false)
 	{
-		if(bKill)
-		{
-			delete m_thread;
-			m_bQuitThread=true;
-		}
-		else
-		{
-			if(!m_bQuitThread)
-			{
-				m_bQuitThread=true;
-			}
-			else
-			{
-				std::cerr<<"Cannot stop thread : The thread is already stopping/stopped"<<std::endl;
-				return -1;
-			}
-		}
+	    if(bKill)
+	    {
+            m_thread->detach();
+            delete m_thread;
+	    }
+	    else
+	    {
+            if(!m_bQuitThread)
+            {
+                m_bQuitThread=true;
+            }
+            else
+            {
+                std::cerr<<"Cannot stop thread : The thread is already stopping/stopped"<<std::endl;
+                return -1;
+            }
+	    }
 		return 1;
 	}
+
+	bool GetIsRunning(){return m_bThreadRunning;}
 
 protected:
 	virtual void OnThreadStart(){};
@@ -79,6 +82,7 @@ private:
 
 	void ThreadFunction()
 	{
+	    m_bThreadRunning = true;
 		OnThreadStart();
 		while(!m_bQuitThread)
 		{
@@ -86,9 +90,10 @@ private:
 			PostThreadProcess();
 		}
 		OnThreadEnd();
-		delete m_thread;
+		m_bThreadRunning = false;
 	}
 
+    bool m_bThreadRunning;
 	bool m_bQuitThread;
 	std::thread* m_thread;
 

@@ -1,11 +1,30 @@
 #include <iostream>
+
 #include <unistd.h>
+#include <signal.h>
 
 #include "Device.hpp"
+
+
+bool bQuit(false);
+
+void OnSigInt(int signum)
+{
+    std::cout<<std::endl<<"/!\\ ==> Exiting program !!!"<<std::endl;
+
+
+    std::clog<<"Deleting Device..."<<std::endl;
+    delete Device::GetDevice();
+    std::clog<<"-> Device deleted"<<std::endl;
+
+    exit(signum);
+}
 
 int main()
 {
 	std::cout<<"Program starts !"<<std::endl;
+
+	signal(SIGINT, OnSigInt);
 
 	#ifndef TRG_DEBUG
 	if(getuid()!=0)
@@ -23,10 +42,9 @@ int main()
 	#endif // TRG_DEBUG
 
 
-	Device dev;
-	dev.StartupRoutine();
+	Device* dev = new Device;
+	//dev->StartupRoutine();
 
-	bool bQuit(false);
 	while(!bQuit)
 	{
 		std::cout<<"\nMain\n";

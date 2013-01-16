@@ -3,11 +3,18 @@
 
 #include <WiringPi.h>
 
+/**
+@brief One-motor information (pin, speed) and GPIO Wrapper
+**/
 class Motor
 {
 public:
+    /**
+    @arg nPin Pin where the motor is connected
+    **/
     Motor(int nPin)
     {
+        //Prepare and init the pin
         m_nPin = nPin;
         pinMode(nPin, OUTPUT);
         digitalWrite(nPin, 0);
@@ -32,6 +39,9 @@ public:
         return m_fSpeed;
     }
 
+    /**
+    @brief Change the state of the motor's pin
+    **/
     void SetPin(bool bState)
     {
         digitalWrite(m_nPin, bState);

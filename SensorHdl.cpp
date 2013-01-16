@@ -26,35 +26,35 @@ void SensorHdl::ResetSpeed()
     m_fSpeed.Set(0,0,0);
     m_fSpeedRot=0;
 
-    m_vGravityAccel = Vector3D<double>(m_sen->GetAcceleroX(), m_sen->GetAcceleroY(), m_sen->GetAcceleroZ());
+    m_vGravityAccel = Vector3D<float>(m_sen->GetAcceleroX(), m_sen->GetAcceleroY(), m_sen->GetAcceleroZ());
 }
 
-Vector3D<double> SensorHdl::GetPosition()
+Vector3D<float> SensorHdl::GetPosition()
 {
     return m_fPos;
 }
 
-double SensorHdl::GetAngularPosition()
+float SensorHdl::GetAngularPosition()
 {
     return m_fPosRot;
 }
 
-Vector3D<double> SensorHdl::GetSpeed()
+Vector3D<float> SensorHdl::GetSpeed()
 {
     return m_fSpeed;
 }
 
-double SensorHdl::GetAngularSpeed()
+float SensorHdl::GetAngularSpeed()
 {
     return m_fPosRot;
 }
 
-Vector3D<double> SensorHdl::GetAcceleration()
+Vector3D<float> SensorHdl::GetAcceleration()
 {
     return m_fAccel;
 }
 
-Vector3D<double> SensorHdl::GetGravityAcceleration()
+Vector3D<float> SensorHdl::GetGravityAcceleration()
 {
     return m_vGravityAccel;
 }

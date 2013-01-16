@@ -12,6 +12,9 @@
 class Device;
 class ConfigFile;
 
+/**
+@brief [Crontroller]
+**/
 class NetCtrl : public ThreadCtrl
 {
 public:

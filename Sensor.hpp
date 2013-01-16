@@ -62,7 +62,7 @@ public:
     float GetAcceleroZ()
     {
         ChangeSelection(1,0);
-        m_fAccelZ = GetPinsValue()/100.0;//TODO Convert byte to acceleration in m.s-2
+        m_fAccelZ = 9.8;//TODO Convert byte to acceleration in m.s-2
         return m_fAccelZ;
     }
 

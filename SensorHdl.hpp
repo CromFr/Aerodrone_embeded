@@ -30,20 +30,20 @@ public:
 	@brief get the current position of the device from the origin, using the integrated speed
 	@return The position in meters
 	**/
-	Vector3D<double> GetPosition();
+	Vector3D<float> GetPosition();
 
 	/**
 	@brief get the current angular position of the device from the origin, using the integrated angular speed
 	@note Y axis is 0 and X is -PI/2
 	@return The position in radians
 	**/
-	double GetAngularPosition();
+	float GetAngularPosition();
 
 	/**
 	@brief Get the current device speed, from the integrated acceleration
 	@return The speed in meter/second
 	**/
-	Vector3D<double> GetSpeed();
+	Vector3D<float> GetSpeed();
 
 
 	/**
@@ -51,7 +51,7 @@ public:
 	@note Y axis is 0 and X is -PI/2
 	@return The speed in radians/sec
 	**/
-	double GetAngularSpeed();
+	float GetAngularSpeed();
 
 
 	/**
@@ -59,10 +59,10 @@ public:
 	@return The acceleration in meter/second
 	@note The gravity acceleration can be retrieved with GetGravityAcceleration()
 	**/
-	Vector3D<double> GetAcceleration();
+	Vector3D<float> GetAcceleration();
 
 
-	Vector3D<double> GetGravityAcceleration();
+	Vector3D<float> GetGravityAcceleration();
 
 
 
@@ -82,17 +82,17 @@ private:
 
 
 	//In millimeters or degrees
-	Vector3D<double> m_fPos;
-	double m_fPosRot;
+	Vector3D<float> m_fPos;
+	float m_fPosRot;
 
 	//In meter.sec-1 or degrees.sec-1
-	Vector3D<double> m_fSpeed;
-	double m_fSpeedRot;
+	Vector3D<float> m_fSpeed;
+	float m_fSpeedRot;
 
 	//In meter.sec-2
-	Vector3D<double> m_fAccel;
+	Vector3D<float> m_fAccel;
 
-	Vector3D<double> m_vGravityAccel;
+	Vector3D<float> m_vGravityAccel;
 
 };
 

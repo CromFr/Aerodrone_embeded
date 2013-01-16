@@ -16,13 +16,15 @@ public:
 	**/
 	void LandRoutine(float fMaxSec);
 
+    /**
+    @brief Change the motors speed by adding fAdd to the current speed
+    **/
+	void ChangeMotorSpeed(float fAdd);
 
 
 private:
 
-	virtual void ThreadProcess();
-
-	void PostThreadProcess();
+	void ThreadProcess();
 
 
 	float m_fGlobalMotorSpeed;

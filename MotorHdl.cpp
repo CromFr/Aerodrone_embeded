@@ -11,11 +11,13 @@ MotorHdl::MotorHdl(const ConfigFile* cfg)
         m_mot[i] = new Motor(cfg->GetValue<int>("PIN_Motors", i));
 
 
-    m_fMotorMinSpeed = cfg->GetValue<float>("MOT_MinSpeed")/100.f;
+    //The PWM freq and the time between two times the pin is set to 0
     m_fPWMFreq = cfg->GetValue<float>("MOT_PwmFreq");
     m_nDelayPwmUS = (1.f/m_fPWMFreq)*1000000;
 
-    m_PWMCheckSleep.tv_sec=0; m_PWMCheckSleep.tv_nsec=cfg->GetValue<float>("MOT_PwmPrecision") * 100000;
+    //Inits the time between two checks to change the pin value to 1
+    m_PWMCheckSleep.tv_sec=0;
+    m_PWMCheckSleep.tv_nsec=cfg->GetValue<float>("MOT_PwmPrecision") * 100000;
 }
 MotorHdl::~MotorHdl()
 {
@@ -42,9 +44,6 @@ void MotorHdl::ThreadProcess()
     int fDelayMotUS[4];
     for(short i=0 ; i<4 ; i++)
     {
-		//fDelayMotUS[i] = nDelayPwmUS*(1-((fTmp/100.f)*(100.f-m_fMotorMinSpeed)+35.f)/100.f);
-		//fDelayMotUS[i] = nDelayPwmUS*(1-fTmp*(100-m_fMotorMinSpeed)/10000+0.35);
-
 		fDelayMotUS[i] = m_nDelayPwmUS*( (50+(m_mot[i]->GetSpeed()/2.0))/100.0  ); //NOTE m_fMotorMinSpeed not used
     }
 
@@ -57,9 +56,11 @@ void MotorHdl::ThreadProcess()
     {
         gettimeofday(&current, NULL);
 
+        //Calculate the elapsed time since the pins were set to 0
         if(current.tv_usec < begin.tv_usec)current.tv_usec+=1000000;
         nElapsedTimeUS = current.tv_usec - begin.tv_usec;
 
+        //Change the pin value to 1 when its time has come
         for(short i=0 ; i<4 && nMot<4 ; i++)
         {
             if(bMot[i] && nElapsedTimeUS >= fDelayMotUS[i])
