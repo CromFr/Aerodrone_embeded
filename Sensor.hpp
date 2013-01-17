@@ -3,7 +3,7 @@
 
 class ConfigFile;
 #include <cstdlib>
-#include <WiringPi.h>
+#include <WiringPiWrap.h>
 
 class Sensor
 {

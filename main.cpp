@@ -16,15 +16,11 @@ void OnSigInt(int signum)
     std::clog<<"Deleting Device..."<<std::endl;
     delete Device::GetDevice();
     std::clog<<"-> Device deleted"<<std::endl;
-
-    exit(signum);
 }
 
 int main()
 {
 	std::cout<<"Program starts !"<<std::endl;
-
-	signal(SIGINT, OnSigInt);
 
 	#ifndef TRG_DEBUG
 	if(getuid()!=0)
@@ -42,6 +38,7 @@ int main()
 	#endif // TRG_DEBUG
 
 
+	signal(SIGINT, OnSigInt);
 	Device* dev = new Device;
 	//dev->StartupRoutine();
 

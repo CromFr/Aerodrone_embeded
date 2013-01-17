@@ -1,7 +1,7 @@
 #ifndef MOTOR_HPP_INCLUDED
 #define MOTOR_HPP_INCLUDED
 
-#include <WiringPi.h>
+#include <WiringPiWrap.h>
 
 /**
 @brief One-motor information (pin, speed) and GPIO Wrapper
