@@ -63,16 +63,14 @@ ________________________________
 **/
 
 #include <iostream>
-#include <fstream>
-#include <sstream>
 #include <vector>
-
-
+#include <sstream>
 
 
 class ConfigFile
 {
     public:
+
 	/**
 	@brief Errors casted by the ConfigFile
 	@see string GetErrorString(enum Error e)
@@ -88,43 +86,38 @@ class ConfigFile
     @brief Get a human readable string for a given error
     @param e The error
     **/
-    static std::string GetErrorString(enum Error e)
-    {
-    	if(e==no_error)return "Success";
-    	else if(e==file_not_found)return "File not found";
-    	else if(e==file_not_opened)return "The file needs to be opened";
-    	return "Unknown error :(";
-	}
+    static std::string GetErrorString(enum Error e);
 
+	//========================
 
-//================================================================================
     /**
     @brief Default constructor
     @warning You must load the configfile manually before using it
     **/
     ConfigFile();
-//================================================================================
+
 	/**
 	@brief Load the config file
     @param cPath Path to the config file
     @param bCreateIfNotExists If true, an empty file will be created if it doesn't exist. If false and the config file doesn't exist, will return FILE_NOT_FOUND.
 	**/
 	enum Error Load(const char* cPath, bool bCreateIfNotExists=false);
-//================================================================================
+
     /**
     @brief Save the current config to the config file
     @arg sNewFile The path to the config file to be written. If void, will save to the config file that has been used in the last Load()
     **/
     enum Error WriteToFile(const char* cNewFile=0);
-//================================================================================
-//================================================================================
+
+    //========================
+
     /**
     @brief Return the string that reprensents the value of the config line. It can be
     @param cName The name of the variable in the config file
     @return examples: "10" or "Thibaut CHARLES" or "10.5 18.0 80.6" for a vector. Returns "" if the row does not exist
     **/
     std::string GetStringValue(const char* cName)const;
-//================================================================================
+
 	template<typename T>
 	/**
 	@brief Get a parsed value from the config file
@@ -162,7 +155,8 @@ class ConfigFile
 		}
 		return 0;
 	}
-//================================================================================
+
+
 	template<typename T>
 	/**
 	@brief Get an array of parsed values from the config file
@@ -193,33 +187,35 @@ class ConfigFile
 		}
 		return Return;
 	}
-//================================================================================
+
+    //========================
+
     /**
     @brief Set a value in the loaded config. If the name of the var doesn't exist, it will add it.
     @param cName Name of the variable to set
     @param cValue string value of the variable to set.
     **/
     void SetStringValue(const char* cName, const char* cValue);
-//================================================================================
+
 	template<typename T>
+    /**
+    @brief Set a value in the loaded config. If the name of the var doesn't exist, it will add it.
+    @param cName Name of the variable to set
+    @param cValue value of the variable to set.
+    **/
 	void SetValue(const char* cName, T Value)
 	{
 		std::stringstream ss;
 		ss<<Value;
 		SetStringValue(cName, ss.str().c_str());
 	}
-//================================================================================
-//================================================================================
+
+	//========================
+
     /**
     @brief Prints the config to cout. Useful for debugging ;)
     **/
-    void Print()const
-{
-    for(unsigned int i=0 ; i<m_Config.size() ; i++)
-    {
-        std::cout<<m_Config[i].name<<"\t"<<m_Config[i].value<<";"<<std::endl;
-    }
-}
+    void Print()const;
 
 
 
