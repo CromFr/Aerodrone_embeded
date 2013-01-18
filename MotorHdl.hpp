@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sys/time.h>
 
-#include "ThreadCtrl.hpp"
+#include "LivingThread.hpp"
 
 class ConfigFile;
 class Motor;
@@ -13,7 +13,7 @@ class Motor;
 @brief [Handler] Handles the motors PWM and allows to modify speeds
 @note The software PWM is generated in a separate thread
 **/
-class MotorHdl : public ThreadCtrl
+class MotorHdl : public LivingThread
 {
 
 public:

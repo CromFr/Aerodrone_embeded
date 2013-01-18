@@ -44,7 +44,7 @@ Device::Device()
     std::clog<<"-> MotorHdl"<<std::endl;
     m_mot = new MotorHdl(cfg);
     m_mot->Start();
-
+/*
     std::clog<<"-> SensorHdl"<<std::endl;
     m_sen = new SensorHdl(cfg);
     m_sen->Start();
@@ -59,7 +59,7 @@ Device::Device()
     std::clog<<"-> NetCtrl"<<std::endl;
     m_netctrl = new NetCtrl(cfg);
     m_netctrl->Start();
-
+*/
     int nSeq[] = {200,400,400};
     BipRoutine(nSeq, 3);
 

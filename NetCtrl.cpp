@@ -40,6 +40,7 @@ void NetCtrl::OnThreadStart()
     m_addrServer.sin_addr.s_addr = INADDR_ANY;
     m_addrServer.sin_port = htons(m_nSockPort);
 
+	//Bind server address & server socket
     if(bind(m_sockServer, (struct sockaddr *) &m_addrServer, sizeof(m_addrServer)) < 0)
     {
         std::cerr<<__FILE__<<" @ "<<__LINE__<<" : Error while binding server socket ("/*<<strerror(errno)*/<<")"<<std::endl;
@@ -47,8 +48,9 @@ void NetCtrl::OnThreadStart()
         Device::GetDevice()->BipRoutine(nSeq, 9);
         sleep(5);
     }
-    listen(m_sockServer,5);
 
+    //Tell the device to watch the socket
+    listen(m_sockServer,5);
 }
 
 
@@ -65,24 +67,27 @@ void NetCtrl::ThreadProcess()
         sleep(5);
     }
 
+	//Convert bytes to readable IPv4 address to print it into the console
     short addrA = m_addrClient.sin_addr.s_addr/16777216;// /2^24
     short addrB = (m_addrClient.sin_addr.s_addr-addrA*16777216)/65536;// /2^16
     short addrC = (m_addrClient.sin_addr.s_addr-addrA*16777216-addrB*65536)/256;// /2^8
     short addrD = m_addrClient.sin_addr.s_addr-addrA*16777216-addrB*65536-addrC*256;
     std::clog<<"Connection from client: "<<addrD<<"."<<addrC<<"."<<addrB<<"."<<addrA<<std::endl;
 
+	//Read & process net data loop
     while(!GetIsThreadQuitting() && m_sockClient>=0)
     {
+		//Read the socket and gets the Packet Size
         uint16_t nPacketSize;
-
         int n = read(m_sockClient,(char*)(&nPacketSize),2);
-        if (n <= 0)break;
+        if (n <= 0)break;//If connection is closed, break
 
+		//Extract the data to be processed
         char cData[nPacketSize];
-
         int m = read(m_sockClient,(char*)(&cData),nPacketSize);
-        if (m <= 0)break;
+        if (m <= 0)break;//If connection is closed, break
 
+		//Process the data
         ProcessNetData(cData);
     }
 
@@ -90,6 +95,7 @@ void NetCtrl::ThreadProcess()
     std::clog<<"Client connection closed"<<std::endl;
 }
 
+//Handy functions
 void WriteSSTream16(std::stringstream& ss, uint16_t i)
 {
     uint16_t nTmp;
@@ -112,6 +118,7 @@ void WriteSSTream8(std::stringstream& ss, uint8_t i)
 {
     ss.write((char*)(&(i)), 1);
 }
+//
 
 void NetCtrl::ProcessNetData(const char* data)
 {
@@ -158,7 +165,7 @@ void NetCtrl::ProcessNetData(const char* data)
     else if(nAction == NET_INFODATA)
     {
         //Should not happen
-        std::cerr<<__FILE__<<" @ "<<__LINE__<<" : Received NET_INFODATA, and it should not happen"<<std::endl;
+        std::cerr<<"Received NET_INFODATA, and it should not happen"<<std::endl;
     }
     else if(nAction == NET_CHANGEMOTORSPEED)
     {

@@ -1,12 +1,15 @@
 #ifndef STABCTRL_INCLUDED
 #define STABCTRL_INCLUDED
 
-#include "ThreadCtrl.hpp"
+#include "LivingThread.hpp"
 
 class Device;
 class ConfigFile;
 
-class StabCtrl : public ThreadCtrl
+/**
+@brief [Controller] Handle the device stabilization
+**/
+class StabCtrl : public LivingThread
 {
 public:
     StabCtrl(ConfigFile* cfg);

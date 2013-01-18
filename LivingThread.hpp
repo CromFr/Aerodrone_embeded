@@ -1,20 +1,22 @@
-#ifndef THREADCTRL_HPP_INCLUDED
-#define THREADCTRL_HPP_INCLUDED
+#ifndef LIVINGTHREAD_HPP_INCLUDED
+#define LIVINGTHREAD_HPP_INCLUDED
 
 #include <iostream>
 #include <thread>
-#include <signal.h>
 
-class ThreadCtrl
+/**
+@brief Pure virtual class to define objects with threads running on
+@note You must re-write "void ThreadProcess()"
+**/
+class LivingThread
 {
 public:
-    ThreadCtrl()
+    LivingThread()
     {
         m_bQuitThread = true;
         m_bThreadRunning = false;
     }
-
-    virtual ~ThreadCtrl()
+    virtual ~LivingThread()
     {
         Stop(true);
     }
@@ -22,13 +24,13 @@ public:
 	/**
 	@brief Starts the thread
 	**/
-	short Start(bool bKill=false)
+	short Start()
 	{
 		if(m_bQuitThread)
 		{
 			m_bQuitThread=false;
 			//m_thread = new std::thread(ThreadWrapper, this);//TODO uncomment
-			m_thread = new std::thread(ThreadCtrl::ThreadWrapper, this);//TODO uncomment
+			m_thread = new std::thread(&ThreadWrapper, this);//TODO uncomment
 		}
 		else
 		{
@@ -40,6 +42,7 @@ public:
 
 	/**
 	@brief Stops the thread
+	@arg bKill If true, it will instantanly stop the thread. Not recommended
 	**/
 	short Stop(bool bKill=false)
 	{
@@ -47,6 +50,8 @@ public:
 	    {
             m_thread->detach();
             delete m_thread;
+			OnThreadEnd();
+            m_bThreadRunning = false;
 	    }
 	    else
 	    {
@@ -63,22 +68,42 @@ public:
 		return 1;
 	}
 
+	/**
+	@brief Gets if the current thread is processing
+	@return true if the thread is running
+	**/
 	bool GetIsRunning(){return m_bThreadRunning;}
 
 protected:
+	/**
+	@brief This function will be called when the thread is started
+	**/
 	virtual void OnThreadStart(){};
+
+	/**
+	@brief The thread function you must re-write, and that will be called infinitely until the thread stops
+	@warning you shouldn't put a while(1) into
+	**/
 	virtual void ThreadProcess()=0;
-	virtual void PostThreadProcess(){}
+
+	/**
+	@brief This function will be called when the thread is stopped
+	@note even when Stop(true)
+	**/
 	virtual void OnThreadEnd(){};
 
+	/**
+	@brief Gets if the current thread is quitting (Quit(false) called) or quitted
+	@return true if the thread is quitting/not running
+	@note Must be put in any blocking function/loop to check if the thread must stop or can continue processing
+	**/
 	bool GetIsThreadQuitting(){return m_bQuitThread;}
 
 private:
-	static void* ThreadWrapper(void* obj)
+	static void ThreadWrapper(void* obj)
 	{
-		ThreadCtrl* ctrl = reinterpret_cast<ThreadCtrl*>(obj);
+		LivingThread* ctrl = reinterpret_cast<LivingThread*>(obj);
 		ctrl->ThreadFunction();
-		return 0;
 	}
 
 	void ThreadFunction()
@@ -88,7 +113,6 @@ private:
 		while(!m_bQuitThread)
 		{
 			ThreadProcess();
-			PostThreadProcess();
 		}
 		OnThreadEnd();
 		m_bThreadRunning = false;
@@ -101,4 +125,4 @@ private:
 
 };
 
-#endif // THREADCTRL_HPP_INCLUDED
+#endif // LIVINGTHREAD_HPP_INCLUDED

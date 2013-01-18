@@ -1,7 +1,7 @@
 #ifndef NETCTRL_HPP_INCLUDED
 #define NETCTRL_HPP_INCLUDED
 
-#include "ThreadCtrl.hpp"
+#include "LivingThread.hpp"
 
 #include <string.h>
 #include <unistd.h>
@@ -13,14 +13,12 @@ class Device;
 class ConfigFile;
 
 /**
-@brief [Crontroller]
+@brief [Controller] Process network data and controlls the device with
 **/
-class NetCtrl : public ThreadCtrl
+class NetCtrl : public LivingThread
 {
 public:
     NetCtrl(ConfigFile* cfg);
-
-
 
 private:
     void ProcessNetData(const char* data);

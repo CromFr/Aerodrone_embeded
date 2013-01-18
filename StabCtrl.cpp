@@ -18,8 +18,7 @@ StabCtrl::StabCtrl(ConfigFile* cfg)
 
 void StabCtrl::LandRoutine(float fMaxSec)
 {
-    bool bThreadQuitting = GetIsThreadQuitting();
-    if(!bThreadQuitting)
+    if(!GetIsThreadQuitting())
         Stop();
 
 	struct timespec Delay; Delay.tv_sec=0; Delay.tv_nsec = 10000000;
@@ -49,7 +48,7 @@ void StabCtrl::ThreadProcess()
 	float fRotSpeed = Device::GetSensors()->GetAngularSpeed();
 
 	Vector3D<float> vInclinaison(fAcc);
-	vInclinaison.Normalize();
+	vInclinaison.Normalize();//Normalize now will prevent to normalize each time PlanGetZAt is called
 
 	m_fZRotCompensation+=m_fRotSensibility*fRotSpeed; //@note may need some better calculus ;)
 
@@ -60,8 +59,8 @@ void StabCtrl::ThreadProcess()
 						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, 28.25)
 					};
 
-	//Makes impossible to have speeds under 0 or over 100
 
+	//Make impossible to have speeds under 0% or over 100%
 	float fMaxValue = 0;
 	for(int i=0 ; i<4 ; i++)if(fSpeed[i]>fMaxValue)fMaxValue = fSpeed[i];
 	float fMinValue = 100;
@@ -89,8 +88,6 @@ void StabCtrl::ThreadProcess()
 	for(int i=0 ; i<4 ; i++)
 	{
 		Device::GetMotors()->SetSpeed(i+1, fSpeed[i]);
-
-		//std::cout<<"$$"<<m_fGlobalMotorSpeed<<"=>"<<fSpeed[i];
 	}
 
 

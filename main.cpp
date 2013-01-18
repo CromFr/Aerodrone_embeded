@@ -16,8 +16,6 @@ void OnSigInt(int signum)
     std::clog<<"Deleting Device..."<<std::endl;
     delete Device::GetDevice();
     std::clog<<"-> Device deleted"<<std::endl;
-
-    exit(signum);
 }
 
 int main()
@@ -39,6 +37,7 @@ int main()
 	}
 	#endif // TRG_DEBUG
 
+	signal(SIGINT, OnSigInt);
 
 	//signal(SIGINT, OnSigInt);
 	Device* dev = new Device;

@@ -5,12 +5,12 @@
 #include <sys/time.h>
 #include "Vector3D.hpp"
 
-#include "ThreadCtrl.hpp"
+#include "LivingThread.hpp"
 
 class Sensor;
 class ConfigFile;
 
-class SensorHdl : public ThreadCtrl
+class SensorHdl : public LivingThread
 {
 public:
 	SensorHdl(const ConfigFile* cfg);

@@ -80,6 +80,7 @@ void SensorHdl::OnThreadStart()
 void SensorHdl::ThreadProcess()
 {
     std::cout<<"I";
+    //Get the values
     m_fAccel.x = m_sen->GetAcceleroX();
     int nElapsedAX = GetElapsedTimeUSSince(&m_dateAccelX);
     gettimeofday(&m_dateAccelX, NULL);
@@ -96,7 +97,7 @@ void SensorHdl::ThreadProcess()
     int nElapsedSR = GetElapsedTimeUSSince(&m_dateGyro);
     gettimeofday(&m_dateGyro, NULL);
 
-
+	//Integrate the values
     m_fSpeed.x += (m_fAccel.x-m_vGravityAccel.x)*nElapsedAX/1000.f;
     m_fSpeed.y += (m_fAccel.y-m_vGravityAccel.y)*nElapsedAY/1000.f;
     m_fSpeed.z += (m_fAccel.z-m_vGravityAccel.z)*nElapsedAZ/1000.f;
