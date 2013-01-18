@@ -27,7 +27,8 @@ public:
 		if(m_bQuitThread)
 		{
 			m_bQuitThread=false;
-			m_thread = new std::thread(ThreadWrapper, this);
+			//m_thread = new std::thread(ThreadWrapper, this);//TODO uncomment
+			m_thread = new std::thread(ThreadCtrl::ThreadWrapper, this);//TODO uncomment
 		}
 		else
 		{

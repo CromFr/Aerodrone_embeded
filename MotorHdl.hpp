@@ -39,7 +39,7 @@ public:
 	float GetSpeed(int motID);
 
 private:
-	void ThreadProcess();
+	virtual void ThreadProcess();
 	void OnThreadEnd();
 
 

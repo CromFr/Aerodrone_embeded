@@ -16,6 +16,8 @@ void OnSigInt(int signum)
     std::clog<<"Deleting Device..."<<std::endl;
     delete Device::GetDevice();
     std::clog<<"-> Device deleted"<<std::endl;
+
+    exit(signum);
 }
 
 int main()
@@ -38,15 +40,14 @@ int main()
 	#endif // TRG_DEBUG
 
 
-	signal(SIGINT, OnSigInt);
+	//signal(SIGINT, OnSigInt);
 	Device* dev = new Device;
 	//dev->StartupRoutine();
 
 	while(!bQuit)
 	{
 		std::cout<<"\nMain\n";
-		struct timespec Delay; Delay.tv_sec=0; Delay.tv_nsec = 500000000;
-		nanosleep(&Delay, NULL);
+		sleep(1);
 	}
 	return 0;
 }

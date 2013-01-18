@@ -1,6 +1,6 @@
 #include "Device.hpp"
 
-#include <WiringPi.h>
+#include "WiringPiWrap.h"
 #include <softTone.h>
 #include "StabCtrl.hpp"
 #include "NetCtrl.hpp"
@@ -41,18 +41,22 @@ Device::Device()
 
 
     //Hardware
+    std::clog<<"-> MotorHdl"<<std::endl;
     m_mot = new MotorHdl(cfg);
     m_mot->Start();
 
+    std::clog<<"-> SensorHdl"<<std::endl;
     m_sen = new SensorHdl(cfg);
     m_sen->Start();
 
 
     //Stabilisation
+    std::clog<<"-> StabCtrl"<<std::endl;
     m_stabctrl = new StabCtrl(cfg);
     m_stabctrl->Start();
 
     //Network
+    std::clog<<"-> NetCtrl"<<std::endl;
     m_netctrl = new NetCtrl(cfg);
     m_netctrl->Start();
 

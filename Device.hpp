@@ -3,14 +3,14 @@
 
 
 /**
-@mainpage Developping for the AeroDrone
+@mainpage Developping\ on\ the\ AeroDrone
 
-@section Routines vs Functions
+@section Routines\ vs\ Functions
 Les routines sont des fonctions qui prennent un temps important à s'éxécuter.
 Elles sont utilisées par exemple pour une faire décoler le drone, ou le faire attérir.
 Souvent certaines fonctions du drone sont désactivées lors des routines (ex: les moteurs à la fin de OnErrorRoutine())
 
-@section Controller vs Handler
+@section Controller\ vs\ Handler
 Un Handler sert de couche d'abstraction pour gérer une partie du fonctionnement du Device, non suceptible de modifier le comportement du drone.
 ex: MotorHdl, SensorHdl
 
