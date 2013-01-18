@@ -12,8 +12,8 @@ template<typename T>
 class Vector3D
 {
 public:
-	Vector3D(const T& _x=0, const T& _y=0, const T& _z=0){x=_x; y=_y; z=_z;}
-	Vector3D(const Vector3D<T>& v){x=v.x; y=v.y; z=v.z;}
+	Vector3D(const T& _x=0, const T& _y=0, const T& _z=0) : x(_x), y(_y), z(_z){}
+	Vector3D(const Vector3D<T>& v) : x(v.x), y(v.y), z(v.z){}
 
 	void Set(T _x, T _y, T _z){this->x=_x; this->y=_y; this->z=_z;}
 

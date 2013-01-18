@@ -1,5 +1,14 @@
-obj/
-bin/
-lib/
-*.o
+#Doxygen documentation
 doc/
+
+#Binaries
+bin/
+
+#Temp files
+obj/
+*.o
+*.*~
+
+#CBP Project not necessary files
+*.depend
+*.layout

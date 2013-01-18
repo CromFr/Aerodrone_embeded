@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <cstdint>
+#include <sstream>
 
 #include "Device.hpp"
 #include "MotorHdl.hpp"

@@ -95,7 +95,7 @@ private:
     {
         short ret=0;
         for(short i=0, coeff=1 ; i<8 ; i++, coeff*=2)
-            ret += coeff*digitalRead(m_nSelectPins[i]);
+            ret += coeff*digitalRead(m_nDataPins[i]);
         return ret;
     }
 
