@@ -79,7 +79,10 @@ void SensorHdl::OnThreadStart()
 
 void SensorHdl::ThreadProcess()
 {
+	#ifdef DEBUG
     std::cout<<"I";
+    #endif
+
     //Get the values
     m_fAccel.x = m_sen->GetAcceleroX();
     int nElapsedAX = GetElapsedTimeUSSince(&m_dateAccelX);

@@ -25,6 +25,7 @@ private:
 
     void OnThreadStart();
 	virtual void ThreadProcess();
+    void OnThreadStop();
 
 
 	int m_nSockPort;

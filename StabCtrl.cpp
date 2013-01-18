@@ -41,7 +41,9 @@ void StabCtrl::ChangeMotorSpeed(float fAdd)
 
 void StabCtrl::ThreadProcess()
 {
+	#ifdef DEBUG
     std::cout<<"S";
+    #endif
 
 	//roll & pitch stabilization
 	Vector3D<float> fAcc(Device::GetSensors()->GetAcceleration());

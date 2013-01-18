@@ -12,71 +12,83 @@ Device* Device::m_instance;
 
 Device::Device()
 {
-    std::cout<<"Initializing Device..."<<std::endl;
+    std::clog<<"\e[33mInitializing Device...\e[m"<<std::endl;
 
+	//Load configuration file (config.cfg)
     ConfigFile* cfg = new ConfigFile;
     ConfigFile::Error nError = cfg->Load("./config.cfg", false);
     if(nError != ConfigFile::no_error)
     {
-        std::cerr<<"-> ConfigFile loading error (./config.cfg) : "<<ConfigFile::GetErrorString(nError)<<std::endl;
-        return;
+        std::cerr<<"-> \e[31mConfigFile loading error (./config.cfg) : "<<ConfigFile::GetErrorString(nError)<<"\e[m"<<std::endl;
+        sleep(-1);
     }
     else
-        std::cout<<"-> ConfigFile ok"<<std::endl;
+        std::clog<<"-> ConfigFile \e[32m[ok]\e[m"<<std::endl;
 
+	//Init WiringPi
     if (wiringPiSetup() == -1)
     {
-        std::cerr<<"-> WiringPi setup failed ! ;("<<std::endl;
-        return;
+        std::cerr<<"-> \e[31mWiringPi setup failed ! ;(\e[m"<<std::endl;
+        sleep(-1);
     }
     else
-        std::cout<<"-> WiringPi ok"<<std::endl;
+        std::clog<<"-> WiringPi \e[32m[ok]\e[m"<<std::endl;
 
+
+	//Init buzzer
     m_nBuzzerPin = cfg->GetValue<int>("PIN_Buzzer");
     softToneCreate(m_nBuzzerPin);
 
 
     //===> No errors during loading
+
+    //Register device instance
     m_instance = this;
 
-
-    //Hardware
-    std::clog<<"-> MotorHdl"<<std::endl;
+    //Start Hardware handlers
     m_mot = new MotorHdl(cfg);
     m_mot->Start();
+    std::clog<<"-> MotorHdl \e[32m[Started]\e[m"<<std::endl;
 
-    std::clog<<"-> SensorHdl"<<std::endl;
     m_sen = new SensorHdl(cfg);
     m_sen->Start();
+    std::clog<<"-> SensorHdl \e[32m[Started]\e[m"<<std::endl;
 
 
-    //Stabilisation
-    std::clog<<"-> StabCtrl"<<std::endl;
+    //Start Stabilisation
     m_stabctrl = new StabCtrl(cfg);
     m_stabctrl->Start();
+    std::clog<<"-> StabCtrl \e[32m[Started]\e[m"<<std::endl;
 
-    //Network
-    std::clog<<"-> NetCtrl"<<std::endl;
+    //Start Network
     m_netctrl = new NetCtrl(cfg);
     m_netctrl->Start();
+    std::clog<<"-> NetCtrl \e[32m[Started]\e[m"<<std::endl;
 
+	//Bip the "Begin" tune
     int nSeq[] = {200,400,400};
     BipRoutine(nSeq, 3);
 
-
+	//Drop the config file
     delete cfg;
+
+    std::clog<<"-> \e[32mDevice Ready!\e[m"<<std::endl;
 }
 
 Device::~Device()
 {
+
+	//Bip the "End" tune
     int nSeq[] = {400,200,200};
     BipRoutine(nSeq, 3);
 
+	//Delete controllers
     std::clog<<"-> Deleting Stabilization Controller"<<std::endl;
     delete m_stabctrl;
     std::clog<<"-> Deleting Network Controller"<<std::endl;
     delete m_netctrl;
 
+	//Delete handlers
     std::clog<<"-> Deleting Motor Handler"<<std::endl;
     delete m_mot;
     std::clog<<"-> Deleting Sensor Handler"<<std::endl;
@@ -112,7 +124,7 @@ void Device::OnCriticalErrorRoutine()
 
 void Device::BipRoutine(int* nSequence, int nSize)
 {
-    struct timespec Delay; Delay.tv_sec=0; Delay.tv_nsec = 300000000;//every 0.3sec
+    struct timespec Delay; Delay.tv_sec=0; Delay.tv_nsec = 200000000;//every 0.2sec
 
     for(int i=0 ; i<nSize ; i++)
     {

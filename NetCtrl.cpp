@@ -29,7 +29,7 @@ void NetCtrl::OnThreadStart()
     m_sockServer = socket(AF_INET, SOCK_STREAM, 0);
     if(m_sockServer < 0)
     {
-        std::cerr<<__FILE__<<" @ "<<__LINE__<<" : Error while opening server socket ("/*<<strerror(errno)*/<<")"<<std::endl;
+        std::cerr<<"\e[31mError while opening server socket ("<<strerror(errno)<<")\e[m"<<std::endl;
         int nSeq[] = {200, 0, 200, 0, 200, 0, 200, 0, 200};
         Device::GetDevice()->BipRoutine(nSeq, 9);
         sleep(5);
@@ -44,7 +44,7 @@ void NetCtrl::OnThreadStart()
 	//Bind server address & server socket
     if(bind(m_sockServer, (struct sockaddr *) &m_addrServer, sizeof(m_addrServer)) < 0)
     {
-        std::cerr<<__FILE__<<" @ "<<__LINE__<<" : Error while binding server socket ("/*<<strerror(errno)*/<<")"<<std::endl;
+        std::cerr<<"\e[31mError while binding server socket ("<<strerror(errno)<<")\e[m"<<std::endl;
         int nSeq[] = {200, 0, 200, 0, 200, 0, 200, 0, 200};
         Device::GetDevice()->BipRoutine(nSeq, 9);
         sleep(5);
@@ -58,13 +58,13 @@ void NetCtrl::OnThreadStart()
 
 void NetCtrl::ThreadProcess()
 {
-    std::clog<<"Waiting for client connection..."<<std::endl;
+    std::clog<<"\e[33mWaiting for client connection...\e[m"<<std::endl;
     struct sockaddr_in m_addrClient;
     socklen_t addrlenClient = sizeof(m_addrClient);
     m_sockClient = accept(m_sockServer, (struct sockaddr *) &m_addrClient, &addrlenClient);
     if (m_sockClient < 0)
     {
-        std::cerr<<__FILE__<<" @ "<<__LINE__<<" : Error while accepting client connexion ("/*<<strerror(errno)*/<<")"<<std::endl;
+        std::cerr<<"\e[31mError while accepting client connexion ("<<strerror(errno)<<")\e[m"<<std::endl;
         sleep(5);
     }
 
@@ -73,7 +73,7 @@ void NetCtrl::ThreadProcess()
     short addrB = (m_addrClient.sin_addr.s_addr-addrA*16777216)/65536;// /2^16
     short addrC = (m_addrClient.sin_addr.s_addr-addrA*16777216-addrB*65536)/256;// /2^8
     short addrD = m_addrClient.sin_addr.s_addr-addrA*16777216-addrB*65536-addrC*256;
-    std::clog<<"Connection from client: "<<addrD<<"."<<addrC<<"."<<addrB<<"."<<addrA<<std::endl;
+    std::clog<<"\e[33mConnection from client: "<<addrD<<"."<<addrC<<"."<<addrB<<"."<<addrA<<"\e[m"<<std::endl;
 
 	//Read & process net data loop
     while(!GetIsThreadQuitting() && m_sockClient>=0)
@@ -93,7 +93,12 @@ void NetCtrl::ThreadProcess()
     }
 
     close(m_sockClient);
-    std::clog<<"Client connection closed"<<std::endl;
+    std::clog<<"\e[33mClient connection closed\e[m"<<std::endl;
+}
+
+void NetCtrl::OnThreadStop()
+{
+	close(m_sockClient);
 }
 
 //Handy functions
@@ -130,7 +135,9 @@ void NetCtrl::ProcessNetData(const char* data)
 
     if(nAction == NET_INFOREQUEST)
     {
+    	#ifdef DEBUG
         std::cout<<"#IR#";
+		#endif
 
         std::stringstream sToSend;
 
@@ -165,11 +172,19 @@ void NetCtrl::ProcessNetData(const char* data)
     }
     else if(nAction == NET_INFODATA)
     {
+    	#ifdef DEBUG
+        std::cout<<"#ID#";
+		#endif
+
         //Should not happen
         std::cerr<<"Received NET_INFODATA, and it should not happen"<<std::endl;
     }
     else if(nAction == NET_CHANGEMOTORSPEED)
     {
+    	#ifdef DEBUG
+        std::cout<<"#CMS#";
+		#endif
+
         uint16_t nValue;
         uint8_t nTmp;
         sData.read((char*)(&nTmp), 1);
