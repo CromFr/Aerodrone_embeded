@@ -1,5 +1,6 @@
 #include "StabCtrl.hpp"
 
+#include <unistd.h>
 #include "Device.hpp"
 #include "ConfigFile.hpp"
 #include "MotorHdl.hpp"
@@ -12,8 +13,29 @@ StabCtrl::StabCtrl(ConfigFile* cfg)
 
 	m_sleepTime.tv_sec = 0;
 	m_sleepTime.tv_nsec = cfg->GetValue<float>("STA_SleepTime")*1000.0;
+	if(m_sleepTime.tv_nsec>=1000000000)
+	{
+		std::cerr<<"\e[31mError : Please set a STA_SleepTime value < 1 000 000 000\e[m"<<std::endl;
+		sleep(-1);
+	}
+	else if(m_sleepTime.tv_nsec<0)
+	{
+		std::cerr<<"\e[31mError : Please set a STA_SleepTime value >= 0\e[m"<<std::endl;
+		sleep(-1);
+	}
+
 	m_fSensibility = cfg->GetValue<float>("STA_Sensibility");
+	if(m_fSensibility<=0)
+	{
+		std::cerr<<"\e[31mError : Please set a STA_Sensibility value > 0\e[m"<<std::endl;
+		sleep(-1);
+	}
 	m_fRotSensibility = cfg->GetValue<float>("STA_RotSensibility");
+	if(m_fRotSensibility<=0)
+	{
+		std::cerr<<"\e[31mError : Please set a STA_RotSensibility value > 0\e[m"<<std::endl;
+		sleep(-1);
+	}
 }
 
 void StabCtrl::LandRoutine(float fMaxSec)
@@ -55,12 +77,16 @@ void StabCtrl::ThreadProcess()
 	m_fZRotCompensation+=m_fRotSensibility*fRotSpeed; //@note may need some better calculus ;)
 
 	float fSpeed[4] = {
-						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, 28.25),
-						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, -28.25),
-						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, -28.25),
-						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, 28.25)
+						m_fGlobalMotorSpeed ,//+ m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, 28.25),
+						m_fGlobalMotorSpeed ,//+ m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, -28.25),
+						m_fGlobalMotorSpeed ,//+ m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, -28.25),
+						m_fGlobalMotorSpeed //+ m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, 28.25)
 					};
 
+//    	std::cout<<"\e[31m#"<<1<<"="<<Device::GetMotors()->GetSpeed(1)<<"#\e[m";
+//    	std::cout<<"\e[31m#"<<2<<"="<<Device::GetMotors()->GetSpeed(2)<<"#\e[m";
+//    	std::cout<<"\e[31m#"<<3<<"="<<Device::GetMotors()->GetSpeed(3)<<"#\e[m";
+//    	std::cout<<"\e[31m#"<<4<<"="<<Device::GetMotors()->GetSpeed(4)<<"#\e[m";
 
 	//Make impossible to have speeds under 0% or over 100%
 	float fMaxValue = 0;
@@ -91,6 +117,8 @@ void StabCtrl::ThreadProcess()
 	{
 		Device::GetMotors()->SetSpeed(i+1, fSpeed[i]);
 	}
+
+
 
 
 	nanosleep(&m_sleepTime, NULL);

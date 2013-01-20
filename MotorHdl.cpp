@@ -8,7 +8,12 @@
 MotorHdl::MotorHdl(const ConfigFile* cfg)
 {
     for(int i=0 ; i<4 ; i++)
-        m_mot[i] = new Motor(cfg->GetValue<int>("PIN_Motors", i));
+	{
+		int nPin = cfg->GetValue<int>("PIN_Motors", i);
+        m_mot[i] = new Motor(nPin);
+    	std::clog<<"Motor "<<i+1<<" is on pin nb "<<nPin<<std::endl;
+	}
+
 
 
     //The PWM freq and the time between two times the pin is set to 0
@@ -34,7 +39,9 @@ void MotorHdl::ThreadProcess()
 
     //Init pins to LO
     for(short i=0 ; i<4 ; i++)
-        m_mot[i]->SetPin(false);
+	{
+        m_mot[i]->SetPin(true);
+	}
 
     //Start timer
     gettimeofday(&begin, NULL);
@@ -49,7 +56,7 @@ void MotorHdl::ThreadProcess()
 
 
     //Processing pwm
-    bool bMot[4] = {true};
+    bool bMot[4] = {true, true, true, true};
     int nMot = 0;
     int nElapsedTimeUS;
     do
@@ -65,7 +72,7 @@ void MotorHdl::ThreadProcess()
         {
             if(bMot[i] && nElapsedTimeUS >= fDelayMotUS[i])
             {
-                m_mot[i]->SetPin(true);
+                m_mot[i]->SetPin(false);
             	nMot++;
                 bMot[i] = false;
             }

@@ -16,6 +16,8 @@
 #define NET_INFOREQUEST (uint8_t)1
 #define NET_INFODATA (uint8_t)2
 #define NET_CHANGEMOTORSPEED (uint8_t)3
+#define NET_RESETINTEGRATOR (uint8_t)4
+#define NET_CRITICALLAND (uint8_t)5
 
 NetCtrl::NetCtrl(ConfigFile* cfg)
 {
@@ -194,6 +196,22 @@ void NetCtrl::ProcessNetData(const char* data)
 
         Device::GetStabCtrl()->ChangeMotorSpeed(nValue/327.68 - 100.0);
     }
+    else if(nAction == NET_RESETINTEGRATOR)
+	{
+    	#ifdef DEBUG
+        std::cout<<"#RSI#";
+		#endif
 
+		Device::GetSensors()->ResetPosition();
+		Device::GetSensors()->ResetSpeed();
+	}
+    else if(nAction == NET_CRITICALLAND)
+	{
+    	#ifdef DEBUG
+        std::cout<<"#CRITLAND#";
+		#endif
+
+		Device::GetDevice()->OnCriticalErrorRoutine();
+	}
 
 }
