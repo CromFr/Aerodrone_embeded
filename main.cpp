@@ -22,6 +22,11 @@ void OnSigInt(int signum)
 
 int main()
 {
+	std::clog<<"\e[36m###############################################"<<std::endl;
+	std::clog<<"Aerodrone Project by \"Club'Elec ISEN Brest\""<<std::endl;
+	std::clog<<"Complete build date: "<<__DATE__<<", "<<__TIME__<<std::endl;
+	std::clog<<"###############################################\e[m"<<std::endl<<std::endl;
+
 	#ifndef DEBUG
 	if(getuid()!=0)
 	{

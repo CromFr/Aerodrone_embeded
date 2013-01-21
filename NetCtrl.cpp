@@ -22,6 +22,16 @@
 NetCtrl::NetCtrl(ConfigFile* cfg)
 {
 	m_nSockPort = cfg->GetValue<int>("NET_Port");
+	if(m_nSockPort<=1024)
+	{
+		std::cerr<<"\e[31mError : Please set a NET_Port value > 1024\e[m"<<std::endl;
+		sleep(-1);
+	}
+	else if(m_nSockPort>=65536)
+	{
+		std::cerr<<"\e[31mError : Please set a NET_Port value < 65536\e[m"<<std::endl;
+		sleep(-1);
+	}
 }
 
 

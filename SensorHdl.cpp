@@ -3,6 +3,7 @@
 #include "ConfigFile.hpp"
 #include "Sensor.hpp"
 #include "timetools.h"
+#include <unistd.h>
 
 
 SensorHdl::SensorHdl(const ConfigFile* cfg) : m_fPos(0,0,0), m_fSpeed(0,0,0), m_fAccel(0,0,0)
@@ -13,6 +14,11 @@ SensorHdl::SensorHdl(const ConfigFile* cfg) : m_fPos(0,0,0), m_fSpeed(0,0,0), m_
 
     m_IntegSleepTime.tv_sec=0;
     m_IntegSleepTime.tv_nsec = cfg->GetValue<float>("SEN_IntegrationDelay")*1000000.0;
+	if(m_IntegSleepTime.tv_nsec>=1000000000)
+	{
+		std::cerr<<"\e[31mError : Please set a SEN_IntegrationDelay value < 1000\e[m"<<std::endl;
+		sleep(-1);
+	}
 }
 
 void SensorHdl::ResetPosition()
