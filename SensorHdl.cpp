@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 
-SensorHdl::SensorHdl(const ConfigFile* cfg) : m_fPos(0,0,0), m_fSpeed(0,0,0), m_fAccel(0,0,0)
+SensorHdl::SensorHdl(const ConfigFile* cfg) : LivingThread("SensorHandler"), m_fPos(0,0,0), m_fSpeed(0,0,0), m_fAccel(0,0,0)
 {
     m_sen = new Sensor(cfg);
     ResetPosition();

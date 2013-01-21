@@ -41,6 +41,7 @@ public:
     {
         ChangeSelection(0,0);
         m_fAccelX = GetPinsValue()/100.0;//TODO Convert byte to acceleration in m.s-2
+        m_fAccelX = 0;
         return m_fAccelX;
     }
 
@@ -51,7 +52,8 @@ public:
 	float GetAcceleroY()
     {
         ChangeSelection(0,1);
-        m_fAccelY = GetPinsValue()/100.0;//TODO Convert byte to acceleration in m.s-2
+        //m_fAccelY = GetPinsValue()/100.0;//TODO Convert byte to acceleration in m.s-2
+        m_fAccelY = 0;
         return m_fAccelY;
     }
 
@@ -62,7 +64,8 @@ public:
     float GetAcceleroZ()
     {
         ChangeSelection(1,0);
-        m_fAccelZ = 9.8;//TODO Convert byte to acceleration in m.s-2
+        //m_fAccelZ = GetPinsValue()/100.0;//TODO Convert byte to acceleration in m.s-2
+        m_fAccelZ = -9.8;
         return m_fAccelZ;
     }
 
@@ -74,6 +77,7 @@ public:
     {
         ChangeSelection(1,1);
         m_fRotSpeed = GetPinsValue()/100.0;//TODO Convert byte to rot speed in m.s-1
+        m_fRotSpeed = 0;
         return m_fRotSpeed;
     }
 

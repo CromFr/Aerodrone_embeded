@@ -6,7 +6,7 @@
 #include "MotorHdl.hpp"
 #include "SensorHdl.hpp"
 
-StabCtrl::StabCtrl(ConfigFile* cfg)
+StabCtrl::StabCtrl(ConfigFile* cfg) :  LivingThread("StabController")
 {
 	m_fGlobalMotorSpeed=0;
 	m_fZRotCompensation=0;
@@ -40,8 +40,11 @@ StabCtrl::StabCtrl(ConfigFile* cfg)
 
 void StabCtrl::LandRoutine(float fMaxSec)
 {
+
+	std::cerr<<"\e[31m/!\\ ==> The device is landing\e[m"<<std::endl;
     if(!GetIsThreadQuitting())
         Stop();
+	std::cerr<<"-> StabCrtl \e[31m[Stopped]\e[m (now controlled manually)"<<std::endl;
 
 	struct timespec Delay; Delay.tv_sec=0; Delay.tv_nsec = 10000000;
 	for( ; m_fGlobalMotorSpeed>0 ; m_fGlobalMotorSpeed-=10/(float)fMaxSec)
@@ -50,7 +53,9 @@ void StabCtrl::LandRoutine(float fMaxSec)
 		nanosleep(&Delay, NULL);
 	}
 	m_fGlobalMotorSpeed=0;
+	std::cerr<<"-> MotorHandler \e[31m[Stopped]\e[m"<<std::endl;
 	Device::GetMotors()->Stop();
+	std::cerr<<"\e[32m--> Landing successful\e[m"<<std::endl;
 }
 
 void StabCtrl::ChangeMotorSpeed(float fAdd)
@@ -58,6 +63,10 @@ void StabCtrl::ChangeMotorSpeed(float fAdd)
     m_fGlobalMotorSpeed+=fAdd;
     if(m_fGlobalMotorSpeed>100)m_fGlobalMotorSpeed=100;
     else if(m_fGlobalMotorSpeed<0)m_fGlobalMotorSpeed=0;
+}
+void StabCtrl::SetGlobalMotorSpeed(float fValue)
+{
+    m_fGlobalMotorSpeed=fValue;
 }
 
 
@@ -77,16 +86,11 @@ void StabCtrl::ThreadProcess()
 	m_fZRotCompensation+=m_fRotSensibility*fRotSpeed; //@note may need some better calculus ;)
 
 	float fSpeed[4] = {
-						m_fGlobalMotorSpeed ,//+ m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, 28.25),
-						m_fGlobalMotorSpeed ,//+ m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, -28.25),
-						m_fGlobalMotorSpeed ,//+ m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, -28.25),
-						m_fGlobalMotorSpeed //+ m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, 28.25)
+						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, 28.25),
+						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, -28.25),
+						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, -28.25),
+						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, 28.25)
 					};
-
-//    	std::cout<<"\e[31m#"<<1<<"="<<Device::GetMotors()->GetSpeed(1)<<"#\e[m";
-//    	std::cout<<"\e[31m#"<<2<<"="<<Device::GetMotors()->GetSpeed(2)<<"#\e[m";
-//    	std::cout<<"\e[31m#"<<3<<"="<<Device::GetMotors()->GetSpeed(3)<<"#\e[m";
-//    	std::cout<<"\e[31m#"<<4<<"="<<Device::GetMotors()->GetSpeed(4)<<"#\e[m";
 
 	//Make impossible to have speeds under 0% or over 100%
 	float fMaxValue = 0;

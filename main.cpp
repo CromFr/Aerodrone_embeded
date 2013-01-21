@@ -15,7 +15,7 @@ void OnSigInt(int signum)
 
     std::clog<<"\e[31mDeleting Device...\e[m"<<std::endl;
     delete Device::GetDevice();
-    std::clog<<"-> \e[32mDevice deleted\e[m"<<std::endl;
+    std::clog<<"--> \e[32mDevice deleted\e[m"<<std::endl;
 
     exit(signum);
 }

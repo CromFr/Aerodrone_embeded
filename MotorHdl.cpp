@@ -6,13 +6,15 @@
 
 
 //==========================================================================
-MotorHdl::MotorHdl(const ConfigFile* cfg)
+MotorHdl::MotorHdl(const ConfigFile* cfg) : LivingThread("MotorHandler")
 {
     for(int i=0 ; i<4 ; i++)
 	{
 		int nPin = cfg->GetValue<int>("PIN_Motors", i);
         m_mot[i] = new Motor(nPin);
+    	#ifdef DEBUG
     	std::clog<<"Motor "<<i+1<<" is on pin nb "<<nPin<<std::endl;
+    	#endif
 	}
 
 
@@ -63,7 +65,7 @@ void MotorHdl::ThreadProcess()
     int fDelayMotUS[4];
     for(short i=0 ; i<4 ; i++)
     {
-		fDelayMotUS[i] = m_nDelayPwmUS*( (50+(m_mot[i]->GetSpeed()/2.0))/100.0  ); //NOTE m_fMotorMinSpeed not used
+		fDelayMotUS[i] = m_nDelayPwmUS*( (50+(m_mot[i]->GetSpeed()/2.0))/100.0  );
     }
 
 

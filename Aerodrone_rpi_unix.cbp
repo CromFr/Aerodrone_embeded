@@ -73,6 +73,7 @@
 		<Unit filename="Device.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="LivingThread.cpp" />
 		<Unit filename="LivingThread.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>

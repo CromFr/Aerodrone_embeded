@@ -2,6 +2,7 @@
 #define STABCTRL_INCLUDED
 
 #include "LivingThread.hpp"
+#include <iostream>
 
 class Device;
 class ConfigFile;
@@ -23,6 +24,11 @@ public:
     @brief Change the motors speed by adding fAdd to the current speed
     **/
 	void ChangeMotorSpeed(float fAdd);
+
+    /**
+    @brief Change the motors speed
+    **/
+	void SetGlobalMotorSpeed(float fValue);
 
 
 private:

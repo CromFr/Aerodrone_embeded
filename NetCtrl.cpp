@@ -15,11 +15,11 @@
 
 #define NET_INFOREQUEST (uint8_t)1
 #define NET_INFODATA (uint8_t)2
-#define NET_CHANGEMOTORSPEED (uint8_t)3
+#define NET_SETGLOBALMOTORSPEED (uint8_t)3
 #define NET_RESETINTEGRATOR (uint8_t)4
 #define NET_CRITICALLAND (uint8_t)5
 
-NetCtrl::NetCtrl(ConfigFile* cfg)
+NetCtrl::NetCtrl(ConfigFile* cfg) : LivingThread("NetworkController")
 {
 	m_nSockPort = cfg->GetValue<int>("NET_Port");
 	if(m_nSockPort<=1024)
@@ -191,7 +191,7 @@ void NetCtrl::ProcessNetData(const char* data)
         //Should not happen
         std::cerr<<"Received NET_INFODATA, and it should not happen"<<std::endl;
     }
-    else if(nAction == NET_CHANGEMOTORSPEED)
+    else if(nAction == NET_SETGLOBALMOTORSPEED)
     {
     	#ifdef DEBUG
         std::cout<<"#CMS#";
@@ -204,7 +204,7 @@ void NetCtrl::ProcessNetData(const char* data)
         sData.read((char*)(&nTmp), 1);
         nValue+=nTmp;
 
-        Device::GetStabCtrl()->ChangeMotorSpeed(nValue/327.68 - 100.0);
+        Device::GetStabCtrl()->SetGlobalMotorSpeed(nValue/655.36);
     }
     else if(nAction == NET_RESETINTEGRATOR)
 	{

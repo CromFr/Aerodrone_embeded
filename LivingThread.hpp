@@ -1,8 +1,7 @@
 #ifndef LIVINGTHREAD_HPP_INCLUDED
 #define LIVINGTHREAD_HPP_INCLUDED
 
-#include <iostream>
-#include <thread>
+namespace std{class thread;}
 
 /**
 @brief Pure virtual class to define objects with threads running on
@@ -11,61 +10,28 @@
 class LivingThread
 {
 public:
-    LivingThread()
-    {
-        m_bQuitThread = true;
-        m_bThreadRunning = false;
-    }
-    virtual ~LivingThread()
-    {
-        Stop(true);
-    }
+    LivingThread(const char* sName="");
+    virtual ~LivingThread();
 
 	/**
 	@brief Starts the thread
+	@return true is the thread was correctly started, false if the thread was already running
 	**/
-	short Start()
-	{
-		if(m_bQuitThread)
-		{
-			m_bQuitThread=false;
-			m_thread = new std::thread(&ThreadWrapper, this);
-		}
-		else
-		{
-			std::cerr<<"Cannot start thread : The thread is already running"<<std::endl;
-			return -1;
-		}
-		return 1;
-	}
+	bool Start();
+
+	/**
+	@brief Waits until the thread is runing
+	@arg nTimeoutS timeout in seconds until we stop waiting
+	@return false if the thread is not running when the timeout expires, true if the thread is running
+	**/
+	bool WaitUntilStarted(float nTimeoutS);
 
 	/**
 	@brief Stops the thread
 	@arg bKill If true, it will instantanly stop the thread. Not recommended
+	@return true is the thread was correctly stopped, false if the thread was already stopped
 	**/
-	short Stop(bool bKill=false)
-	{
-	    if(bKill)
-	    {
-            m_thread->detach();
-            delete m_thread;
-			OnThreadEnd();
-            m_bThreadRunning = false;
-	    }
-	    else
-	    {
-            if(!m_bQuitThread)
-            {
-                m_bQuitThread=true;
-            }
-            else
-            {
-                std::cerr<<"Cannot stop thread : The thread is already stopping/stopped"<<std::endl;
-                return -1;
-            }
-	    }
-		return 1;
-	}
+	bool Stop(bool bKill=false);
 
 	/**
 	@brief Gets if the current thread is processing
@@ -99,27 +65,14 @@ protected:
 	bool GetIsThreadQuitting(){return m_bQuitThread;}
 
 private:
-	static void ThreadWrapper(void* obj)
-	{
-		LivingThread* ctrl = reinterpret_cast<LivingThread*>(obj);
-		ctrl->ThreadFunction();
-	}
+	static void ThreadWrapper(void* obj);
 
-	void ThreadFunction()
-	{
-	    m_bThreadRunning = true;
-		OnThreadStart();
-		while(!m_bQuitThread)
-		{
-			ThreadProcess();
-		}
-		OnThreadEnd();
-		m_bThreadRunning = false;
-	}
+	void ThreadFunction();
 
     bool m_bThreadRunning;
 	bool m_bQuitThread;
 	std::thread* m_thread;
+	const char* m_sName;
 
 
 };

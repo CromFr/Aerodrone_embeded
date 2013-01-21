@@ -48,31 +48,46 @@ Device::Device()
     //Start Hardware handlers
     m_mot = new MotorHdl(cfg);
     m_mot->Start();
-    std::clog<<"-> MotorHdl \e[32m[Started]\e[m"<<std::endl;
+    m_stabctrl->WaitUntilStarted(1);
 
     m_sen = new SensorHdl(cfg);
     m_sen->Start();
-    std::clog<<"-> SensorHdl \e[32m[Started]\e[m"<<std::endl;
+    m_stabctrl->WaitUntilStarted(1);
 
 
     //Start Stabilisation
     m_stabctrl = new StabCtrl(cfg);
     m_stabctrl->Start();
-    std::clog<<"-> StabCtrl \e[32m[Started]\e[m"<<std::endl;
+    m_stabctrl->WaitUntilStarted(1);
 
     //Start Network
     m_netctrl = new NetCtrl(cfg);
     m_netctrl->Start();
-    std::clog<<"-> NetCtrl \e[32m[Started]\e[m"<<std::endl;
+    m_stabctrl->WaitUntilStarted(1);
 
-	//Bip the "Begin" tune
-    int nSeq[] = {200,400,400};
-    BipRoutine(nSeq, 3);
+    if((m_mot->GetIsRunning()+m_sen->GetIsRunning()+m_stabctrl->GetIsRunning()+m_netctrl->GetIsRunning()) == 4)
+    {
 
-	//Drop the config file
-    delete cfg;
+		//Drop the config file
+		delete cfg;
 
-    std::clog<<"-> \e[32mDevice Ready!\e[m"<<std::endl;
+		std::clog<<"--> \e[32mDevice Ready!\e[m"<<std::endl;
+
+		//Bip the "Begin" tune
+		int nSeq[] = {200,400,400};
+		BipRoutine(nSeq, 3);
+    }
+    else
+    {
+		std::clog<<"--> \e[31mError on Device Init! :(\e[m"<<std::endl;
+
+		//Bip the "error" tune
+		int nSeq[] = {200,400,200,400,200,400,200,400,200,400,200,200};
+		BipRoutine(nSeq, 12);
+
+		sleep(-1);
+    }
+
 }
 
 Device::~Device()
@@ -118,7 +133,7 @@ void Device::OnErrorRoutine()
 
 void Device::OnCriticalErrorRoutine()
 {
-    m_stabctrl->LandRoutine(1);
+    m_stabctrl->LandRoutine(5);
 }
 
 
