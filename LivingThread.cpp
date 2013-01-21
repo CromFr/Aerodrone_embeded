@@ -30,26 +30,19 @@ bool LivingThread::Start()
 	return true;
 }
 
-bool LivingThread::WaitUntilStarted(float nTimeoutS)//TODO Fix this : segfault when accessing to any member vars
+bool LivingThread::WaitUntilStarted(float fTimeoutS)
 {
-//	struct timespec delay;
-//	delay.tv_sec=nTimeoutS;
-//	delay.tv_nsec=(nTimeoutS-delay.tv_sec)*1000000000;
-//
-//	for(float f=0 ; f<nTimeoutS ; f+=0.001)
-//	{
-//		sleep(1);
-//		if(m_bThreadRunning == true)
-//			nanosleep(&delay, NULL);
-//		else
-//			return true;
-//	}
-
 	struct timespec delay;
-	delay.tv_sec=0;
-	delay.tv_nsec=nTimeoutS*1000000;
-	nanosleep(&delay, NULL);
+	delay.tv_sec = 0;
+	delay.tv_nsec = 1000000;//1ms
 
+	int nTimes = fTimeoutS*1000.0;
+	for(int i=0 ; i<nTimes ; i++)
+	{
+		if(m_bThreadRunning == true)
+			return true;
+		nanosleep(&delay, NULL);
+	}
 	return false;
 }
 

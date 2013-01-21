@@ -24,7 +24,7 @@ public:
 	@arg nTimeoutS timeout in seconds until we stop waiting
 	@return false if the thread is not running when the timeout expires, true if the thread is running
 	**/
-	bool WaitUntilStarted(float nTimeoutS);
+	bool WaitUntilStarted(float fTimeoutS);
 
 	/**
 	@brief Stops the thread

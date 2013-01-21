@@ -48,11 +48,11 @@ Device::Device()
     //Start Hardware handlers
     m_mot = new MotorHdl(cfg);
     m_mot->Start();
-    m_stabctrl->WaitUntilStarted(1);
+    m_mot->WaitUntilStarted(1);
 
     m_sen = new SensorHdl(cfg);
     m_sen->Start();
-    m_stabctrl->WaitUntilStarted(1);
+    m_sen->WaitUntilStarted(1);
 
 
     //Start Stabilisation
@@ -63,7 +63,7 @@ Device::Device()
     //Start Network
     m_netctrl = new NetCtrl(cfg);
     m_netctrl->Start();
-    m_stabctrl->WaitUntilStarted(1);
+    m_netctrl->WaitUntilStarted(1);
 
     if((m_mot->GetIsRunning()+m_sen->GetIsRunning()+m_stabctrl->GetIsRunning()+m_netctrl->GetIsRunning()) == 4)
     {
