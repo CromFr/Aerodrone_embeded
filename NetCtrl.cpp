@@ -19,6 +19,21 @@
 #define NET_RESETINTEGRATOR (uint8_t)4
 #define NET_CRITICALLAND (uint8_t)5
 
+#define NET_MOVE (uint8_t)10
+	#define NET_MOVE_XINC (uint8_t)1
+	#define NET_MOVE_XDEC (uint8_t)2
+	#define NET_MOVE_XSTOP (uint8_t)3
+	#define NET_MOVE_YINC (uint8_t)4
+	#define NET_MOVE_YDEC (uint8_t)5
+	#define NET_MOVE_YSTOP (uint8_t)6
+	#define NET_MOVE_ZINC (uint8_t)7
+	#define NET_MOVE_ZDEC (uint8_t)8
+	#define NET_MOVE_ZSTOP (uint8_t)9
+	#define NET_MOVE_RINC (uint8_t)10
+	#define NET_MOVE_RDEC (uint8_t)11
+	#define NET_MOVE_RSTOP (uint8_t)12
+
+
 NetCtrl::NetCtrl(ConfigFile* cfg) : LivingThread("NetworkController")
 {
 	m_nSockPort = cfg->GetValue<int>("NET_Port");
@@ -222,6 +237,42 @@ void NetCtrl::ProcessNetData(const char* data)
 		#endif
 
 		Device::GetDevice()->OnCriticalErrorRoutine();
+	}
+    else if(nAction == NET_MOVE)
+	{
+    	#ifdef DEBUG
+        std::cout<<"#MV#";
+		#endif
+
+        uint8_t nDirection;
+        sData.read((char*)(&nDirection), 1);
+
+		float nReset = 0;
+		float nAngleInc = 5;
+		float nAngleDec = -5;
+
+		std::cout<<"nDirection="<<nDirection<<std::endl;
+		switch(nDirection)
+		{
+			case NET_MOVE_YINC:		Device::GetStabCtrl()->SetAnglularCompensation(&nAngleInc, 0);	break;
+			case NET_MOVE_YDEC:		Device::GetStabCtrl()->SetAnglularCompensation(&nAngleDec, 0);	break;
+			case NET_MOVE_YSTOP:	Device::GetStabCtrl()->SetAnglularCompensation(&nReset, 0);		break;
+			case NET_MOVE_XINC:		Device::GetStabCtrl()->SetAnglularCompensation(0, &nAngleDec);	break;
+			case NET_MOVE_XDEC:		Device::GetStabCtrl()->SetAnglularCompensation(0, &nAngleInc);	break;
+			case NET_MOVE_XSTOP:	Device::GetStabCtrl()->SetAnglularCompensation(0, &nReset);		break;
+
+			case NET_MOVE_ZINC:		Device::GetStabCtrl()->ChangeMotorSpeed(2.5);					break;
+			case NET_MOVE_ZDEC:		Device::GetStabCtrl()->ChangeMotorSpeed(-2.5);					break;
+			case NET_MOVE_ZSTOP:	/*Device::GetStabCtrl()->ChangeMotorSpeed(0);*/					break;
+
+			case NET_MOVE_RINC:		Device::GetStabCtrl()->ChangeRotCompensation(2.5);					break;
+			case NET_MOVE_RDEC:		Device::GetStabCtrl()->ChangeRotCompensation(-2.5);					break;
+			case NET_MOVE_RSTOP:	/*Device::GetStabCtrl()->ChangeRotCompensation(0);*/					break;
+		}
+
+
+
+
 	}
 
 }

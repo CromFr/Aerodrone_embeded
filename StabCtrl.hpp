@@ -30,14 +30,26 @@ public:
     **/
 	void SetGlobalMotorSpeed(float fValue);
 
+    /**
+    @brief Tilts the device to move it
+    @arg fRotXDeg if=0 the value is not changed, if !=0, the pointed value (in degree) is taken
+    @arg fRotYDeg if=0 the value is not changed, if !=0, the pointed value (in degree) is taken
+    **/
+	void SetAnglularCompensation(float* fRotXDeg, float* fRotYDeg);
+
+	void ChangeRotCompensation(float f){m_fZRotCompensation+=f;}
+
 
 private:
 
+	void OnThreadStart();
 	void ThreadProcess();
 
 
 	float m_fGlobalMotorSpeed;
 	float m_fZRotCompensation;
+	float m_fXAngleCompensation;
+	float m_fYAngleCompensation;
 
 	float m_fSensibility;
 	float m_fRotSensibility;

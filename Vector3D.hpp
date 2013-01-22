@@ -70,6 +70,39 @@ public:
 		return x*x+y*y+z*z;
 	}
 
+	Vector3D& RotateX(float fDeg)
+	{
+		fDeg *= 3.1415926/180.0;
+		float fSin = sin(fDeg);
+		float fCos = cos(fDeg);
+
+		y = y*fCos - z*fSin;
+		z = y*fSin + z*fCos;
+		return *this;
+	}
+
+	Vector3D& RotateY(float fDeg)
+	{
+		fDeg *= 3.1415926/180.0;
+		float fSin = sin(fDeg);
+		float fCos = cos(fDeg);
+
+		x = z*fSin + x*fCos;
+		z = z*fCos - x*fSin;
+		return *this;
+	}
+
+	Vector3D& RotateZ(float fDeg)
+	{
+		fDeg *= 3.1415926/180.0;
+		float fSin = sin(fDeg);
+		float fCos = cos(fDeg);
+
+		x = x*fSin + y*fCos;
+		y = x*fCos - y*fSin;
+		return *this;
+	}
+
 	Vector3D<T> operator+(const Vector3D<T>& other){return Vector3D<T>(this->x+other.x, this->y+other.y, this->z+other.z);}
 	void operator+=(const Vector3D<T>& other){this->x+=other.x; this->y+=other.y; this->z+=other.z;}
 

@@ -8,9 +8,6 @@
 
 StabCtrl::StabCtrl(ConfigFile* cfg) :  LivingThread("StabController")
 {
-	m_fGlobalMotorSpeed=0;
-	m_fZRotCompensation=0;
-
 	m_sleepTime.tv_sec = 0;
 	m_sleepTime.tv_nsec = cfg->GetValue<float>("STA_SleepTime")*1000.0;
 	if(m_sleepTime.tv_nsec>=1000000000)
@@ -69,6 +66,19 @@ void StabCtrl::SetGlobalMotorSpeed(float fValue)
     m_fGlobalMotorSpeed=fValue;
 }
 
+void StabCtrl::SetAnglularCompensation(float* fRotXDeg, float* fRotYDeg)
+{
+	if(fRotXDeg!=0)m_fXAngleCompensation = *fRotXDeg;
+	if(fRotYDeg!=0)m_fYAngleCompensation = *fRotYDeg;
+}
+
+void StabCtrl::OnThreadStart()
+{
+	m_fXAngleCompensation=0;
+	m_fYAngleCompensation=0;
+	m_fGlobalMotorSpeed=0;
+	m_fZRotCompensation=0;
+}
 
 void StabCtrl::ThreadProcess()
 {
@@ -77,19 +87,20 @@ void StabCtrl::ThreadProcess()
     #endif
 
 	//roll & pitch stabilization
-	Vector3D<float> fAcc(Device::GetSensors()->GetAcceleration());
-	float fRotSpeed = Device::GetSensors()->GetAngularSpeed();
 
-	Vector3D<float> vInclinaison(fAcc);
+	Vector3D<float> vInclinaison(Device::GetSensors()->GetAcceleration());
+	vInclinaison.RotateX(m_fXAngleCompensation);
+	vInclinaison.RotateY(m_fYAngleCompensation);
 	vInclinaison.Normalize();//Normalize now will prevent to normalize each time PlanGetZAt is called
 
+	float fRotSpeed = Device::GetSensors()->GetAngularSpeed();
 	m_fZRotCompensation+=m_fRotSensibility*fRotSpeed; //@note may need some better calculus ;)
 
 	float fSpeed[4] = {
 						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, 28.25),
-						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, -28.25),
+						m_fGlobalMotorSpeed - m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, -28.25),
 						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, -28.25),
-						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, 28.25)
+						m_fGlobalMotorSpeed - m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, 28.25)
 					};
 
 	//Make impossible to have speeds under 0% or over 100%
