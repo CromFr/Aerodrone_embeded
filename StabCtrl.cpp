@@ -97,10 +97,10 @@ void StabCtrl::ThreadProcess()
 	m_fZRotCompensation+=m_fRotSensibility*fRotSpeed; //@note may need some better calculus ;)
 
 	float fSpeed[4] = {
-						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, 28.25),
-						m_fGlobalMotorSpeed - m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, -28.25),
-						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, -28.25),
-						m_fGlobalMotorSpeed - m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, 28.25)
+						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, 28.25)*m_fSensibility,
+						m_fGlobalMotorSpeed - m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, -28.25)*m_fSensibility,
+						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, -28.25)*m_fSensibility,
+						m_fGlobalMotorSpeed - m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, 28.25)*m_fSensibility
 					};
 
 	//Make impossible to have speeds under 0% or over 100%

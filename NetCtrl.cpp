@@ -248,10 +248,9 @@ void NetCtrl::ProcessNetData(const char* data)
         sData.read((char*)(&nDirection), 1);
 
 		float nReset = 0;
-		float nAngleInc = 5;
-		float nAngleDec = -5;
+		float nAngleInc = 1;
+		float nAngleDec = -1;
 
-		std::cout<<"nDirection="<<nDirection<<std::endl;
 		switch(nDirection)
 		{
 			case NET_MOVE_YINC:		Device::GetStabCtrl()->SetAnglularCompensation(&nAngleInc, 0);	break;

@@ -29,14 +29,14 @@ MotorHdl::MotorHdl(const ConfigFile* cfg) : LivingThread("MotorHandler")
     m_nDelayPwmUS = (1.f/m_fPWMFreq)*1000000;
 
     //Inits the time between two checks to change the pin value to 1
-    int nMotPwmPrec = cfg->GetValue<float>("MOT_PwmPrecision");
-	if(nMotPwmPrec<=0)
+    float fMotPwmPrec = cfg->GetValue<float>("MOT_PwmPrecision");
+	if(fMotPwmPrec<=0)
 	{
 		std::cerr<<"\e[31mError : Please set a MOT_PwmPrecision value > 0\e[m"<<std::endl;
 		sleep(-1);
 	}
     m_PWMCheckSleep.tv_sec=0;
-    m_PWMCheckSleep.tv_nsec=nMotPwmPrec * 100000;
+    m_PWMCheckSleep.tv_nsec=fMotPwmPrec * 100000;
 }
 MotorHdl::~MotorHdl()
 {
