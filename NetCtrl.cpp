@@ -125,6 +125,7 @@ void NetCtrl::ThreadProcess()
 
 void NetCtrl::OnThreadStop()
 {
+	close(m_sockServer);
 	close(m_sockClient);
 }
 
@@ -195,7 +196,7 @@ void NetCtrl::ProcessNetData(const char* data)
 
         //Sending packet
         int m = write(m_sockClient, sToSend.str().c_str(), sToSend.str().length());
-        if (m <= 0)std::cerr<<__FILE__<<" @ "<<__LINE__<<" : Error while sending InfoData ("/*<<strerror(errno)*/<<")"<<std::endl;
+        if (m <= 0)std::cerr<<__FILE__<<" @ "<<__LINE__<<" : Error while sending InfoData ("<<strerror(errno)<<")"<<std::endl;
     }
     else if(nAction == NET_INFODATA)
     {
