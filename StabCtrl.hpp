@@ -3,6 +3,7 @@
 
 #include "LivingThread.hpp"
 #include <iostream>
+#include "Vector3D.hpp"
 
 class Device;
 class ConfigFile;
@@ -39,6 +40,8 @@ public:
 
 	void ChangeRotCompensation(float f){m_fZRotCompensation+=f;}
 
+	void SetTargetSpeed(const Vector3D<float>& v){m_vTargetSpeed = v;}
+
 
 private:
 
@@ -50,6 +53,8 @@ private:
 	float m_fZRotCompensation;
 	float m_fXAngleCompensation;
 	float m_fYAngleCompensation;
+
+	Vector3D<float> m_vTargetSpeed;
 
 	float m_fSensibility;
 	float m_fRotSensibility;

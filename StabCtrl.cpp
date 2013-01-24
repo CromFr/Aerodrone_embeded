@@ -86,23 +86,34 @@ void StabCtrl::ThreadProcess()
     std::cout<<"S";
     #endif
 
-	//roll & pitch stabilization
+	//----------------------------------------------------------------------------------
+	Vector3D<float> vSpeed(Device::GetSensors()->GetSpeed());
 
-	Vector3D<float> vInclinaison(Device::GetSensors()->GetAcceleration());
-	vInclinaison.RotateX(m_fXAngleCompensation);
-	vInclinaison.RotateY(m_fYAngleCompensation);
-	vInclinaison.Normalize();//Normalize now will prevent to normalize each time PlanGetZAt is called
+	m_fGlobalMotorSpeed += (m_vTargetSpeed.z - vSpeed.z)*m_fSensibility;
+	float fDiffY = (m_vTargetSpeed.y - vSpeed.y)*m_fSensibility/2.f;
+	float fDiffX = (m_vTargetSpeed.x - vSpeed.x)*m_fSensibility/2.f;
 
-	float fRotSpeed = Device::GetSensors()->GetAngularSpeed();
-	m_fZRotCompensation+=m_fRotSensibility*fRotSpeed; //@note may need some better calculus ;)
+	m_fZRotCompensation += m_fRotSensibility*Device::GetSensors()->GetAngularSpeed()/2.f; //@note may need some better calculus ;)
+
+	/** Drone layout
+	4     1
+	 \   /	 y
+	  \ /	 |
+	  [ ]	 o--x
+	  / \	z
+	 /   \
+	3     2
+	**/
 
 	float fSpeed[4] = {
-						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, 28.25)*m_fSensibility,
-						m_fGlobalMotorSpeed - m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(28.25, -28.25)*m_fSensibility,
-						m_fGlobalMotorSpeed + m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, -28.25)*m_fSensibility,
-						m_fGlobalMotorSpeed - m_fZRotCompensation/2.f - vInclinaison.PlanGetZAt(-28.25, 28.25)*m_fSensibility
+						m_fGlobalMotorSpeed + m_fZRotCompensation - fDiffY - fDiffX,
+						m_fGlobalMotorSpeed - m_fZRotCompensation + fDiffY - fDiffX,
+						m_fGlobalMotorSpeed + m_fZRotCompensation + fDiffY + fDiffX,
+						m_fGlobalMotorSpeed - m_fZRotCompensation - fDiffY + fDiffX
 					};
 
+
+	//----------------------------------------------------------------------------------
 	//Make impossible to have speeds under 0% or over 100%
 	float fMaxValue = 0;
 	for(int i=0 ; i<4 ; i++)if(fSpeed[i]>fMaxValue)fMaxValue = fSpeed[i];

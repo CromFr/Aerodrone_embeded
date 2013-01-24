@@ -248,22 +248,18 @@ void NetCtrl::ProcessNetData(const char* data)
         uint8_t nDirection;
         sData.read((char*)(&nDirection), 1);
 
-		float nReset = 0;
-		float nAngleInc = 1;
-		float nAngleDec = -1;
-
 		switch(nDirection)
 		{
-			case NET_MOVE_YINC:		Device::GetStabCtrl()->SetAnglularCompensation(&nAngleInc, 0);	break;
-			case NET_MOVE_YDEC:		Device::GetStabCtrl()->SetAnglularCompensation(&nAngleDec, 0);	break;
-			case NET_MOVE_YSTOP:	Device::GetStabCtrl()->SetAnglularCompensation(&nReset, 0);		break;
-			case NET_MOVE_XINC:		Device::GetStabCtrl()->SetAnglularCompensation(0, &nAngleDec);	break;
-			case NET_MOVE_XDEC:		Device::GetStabCtrl()->SetAnglularCompensation(0, &nAngleInc);	break;
-			case NET_MOVE_XSTOP:	Device::GetStabCtrl()->SetAnglularCompensation(0, &nReset);		break;
+			case NET_MOVE_YINC:		Device::GetStabCtrl()->SetTargetSpeed(Vector3D<float>(0,5,0));		break;
+			case NET_MOVE_YDEC:		Device::GetStabCtrl()->SetTargetSpeed(Vector3D<float>(0,-5,0));	break;
+			case NET_MOVE_YSTOP:	Device::GetStabCtrl()->SetTargetSpeed(Vector3D<float>(0,0,0));		break;
+			case NET_MOVE_XINC:		Device::GetStabCtrl()->SetTargetSpeed(Vector3D<float>(5,0,0));		break;
+			case NET_MOVE_XDEC:		Device::GetStabCtrl()->SetTargetSpeed(Vector3D<float>(-5,0,0));	break;
+			case NET_MOVE_XSTOP:	Device::GetStabCtrl()->SetTargetSpeed(Vector3D<float>(0,0,0));		break;
 
-			case NET_MOVE_ZINC:		Device::GetStabCtrl()->ChangeMotorSpeed(2.5);					break;
-			case NET_MOVE_ZDEC:		Device::GetStabCtrl()->ChangeMotorSpeed(-2.5);					break;
-			case NET_MOVE_ZSTOP:	/*Device::GetStabCtrl()->ChangeMotorSpeed(0);*/					break;
+			case NET_MOVE_ZINC:		Device::GetStabCtrl()->SetTargetSpeed(Vector3D<float>(0,0,5));		break;
+			case NET_MOVE_ZDEC:		Device::GetStabCtrl()->SetTargetSpeed(Vector3D<float>(0,0,-5));	break;
+			case NET_MOVE_ZSTOP:	Device::GetStabCtrl()->SetTargetSpeed(Vector3D<float>(0,0,0));		break;
 
 			case NET_MOVE_RINC:		Device::GetStabCtrl()->ChangeRotCompensation(2.5);					break;
 			case NET_MOVE_RDEC:		Device::GetStabCtrl()->ChangeRotCompensation(-2.5);					break;
