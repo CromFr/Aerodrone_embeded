@@ -133,9 +133,7 @@ void Device::OnErrorRoutine()
 
 void Device::OnCriticalErrorRoutine()
 {
-    //m_stabctrl->LandRoutine(5);
-    m_stabctrl->Stop(true);
-    m_mot->Stop(true);
+    m_stabctrl->LandRoutine(5);
 
 	//Bip the "error" tune
 	int nSeq[] = {200,400,200,400,200,400,200,400,200,400,200,200};
